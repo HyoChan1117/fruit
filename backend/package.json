@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --poll --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "prisma migrate deploy && node dist/src/server.js",
+    "start": "prisma migrate deploy && npx prisma db seed && node dist/src/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "prisma db seed"
