@@ -3,7 +3,7 @@ import path from "path";
 import crypto from "crypto";
 import multer from "multer";
 
-const UPLOAD_ROOT = path.join(__dirname, "..", "..", "uploads");
+const UPLOAD_ROOT = path.join(process.cwd(), "uploads");
 
 const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
