@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AuctionResult } from "../api/types";
 
 const VISIBLE_ROWS = 5;
-const ROW_HEIGHT_PX = 44;
+const DEFAULT_ROW_HEIGHT_PX = 44;
 const STEP_INTERVAL_MS = 2500;
 const TRANSITION_MS = 500;
 
@@ -14,6 +14,19 @@ export function AuctionTicker({ results }: AuctionTickerProps) {
   const shouldCycle = results.length > VISIBLE_ROWS;
   const [step, setStep] = useState(0);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
+  const [rowHeight, setRowHeight] = useState(DEFAULT_ROW_HEIGHT_PX);
+  const firstRowRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const node = firstRowRef.current;
+    if (!node) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height;
+      if (height > 0) setRowHeight(height);
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [results]);
 
   useEffect(() => {
     if (!shouldCycle) return;
@@ -54,24 +67,26 @@ export function AuctionTicker({ results }: AuctionTickerProps) {
         <span>수량</span>
         <span>단가(원)</span>
       </div>
-      <div className="ticker__viewport">
+      <div className="ticker__viewport" style={{ height: rowHeight * VISIBLE_ROWS }}>
         <div
           className="ticker__track"
           style={{
-            transform: `translateY(-${step * ROW_HEIGHT_PX}px)`,
+            transform: `translateY(-${step * rowHeight}px)`,
             transition: transitionEnabled ? `transform ${TRANSITION_MS}ms ease` : "none",
           }}
         >
           {rows.map((result, index) => (
-            <div className="ticker__row" key={`${result.id}-${index}`}>
-              <span>{new Date(result.auctionDate).toLocaleDateString()}</span>
-              <span>{result.ownerName}</span>
-              <span>{result.productName}</span>
-              <span>{result.variety}</span>
-              <span>{result.grade}</span>
-              <span>{result.weight.toLocaleString()}</span>
-              <span>{result.quantity.toLocaleString()}</span>
-              <span>{result.unitPrice.toLocaleString()}</span>
+            <div className="ticker__row" key={`${result.id}-${index}`} ref={index === 0 ? firstRowRef : undefined}>
+              <span data-label="경매일자">{new Date(result.auctionDate).toLocaleDateString()}</span>
+              <span data-label="출하주">{result.ownerName}</span>
+              <span className="ticker__cell--title" data-label="품목">
+                {result.productName}
+              </span>
+              <span data-label="품종">{result.variety}</span>
+              <span data-label="등급">{result.grade}</span>
+              <span data-label="무게(kg)">{result.weight.toLocaleString()}</span>
+              <span data-label="수량">{result.quantity.toLocaleString()}</span>
+              <span data-label="단가(원)">{result.unitPrice.toLocaleString()}</span>
             </div>
           ))}
         </div>
