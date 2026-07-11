@@ -75,20 +75,24 @@ export function AuctionTicker({ results }: AuctionTickerProps) {
             transition: transitionEnabled ? `transform ${TRANSITION_MS}ms ease` : "none",
           }}
         >
-          {rows.map((result, index) => (
-            <div className="ticker__row" key={`${result.id}-${index}`} ref={index === 0 ? firstRowRef : undefined}>
-              <span data-label="경매일자">{new Date(result.auctionDate).toLocaleDateString()}</span>
-              <span data-label="출하주">{result.ownerName}</span>
-              <span className="ticker__cell--title" data-label="품목">
-                {result.productName}
-              </span>
-              <span data-label="품종">{result.variety}</span>
-              <span data-label="등급">{result.grade}</span>
-              <span data-label="무게(kg)">{result.weight.toLocaleString()}</span>
-              <span data-label="수량">{result.quantity.toLocaleString()}</span>
-              <span data-label="단가(원)">{result.unitPrice.toLocaleString()}</span>
-            </div>
-          ))}
+          {rows.map((result, index) => {
+            const auctionDate = new Date(result.auctionDate);
+            return (
+              <div className="ticker__row" key={`${result.id}-${index}`} ref={index === 0 ? firstRowRef : undefined}>
+                <span className="ticker__date">
+                  <span className="ticker__date--full">{auctionDate.toLocaleDateString()}</span>
+                  <span className="ticker__date--short">{`${auctionDate.getMonth() + 1}.${auctionDate.getDate()}`}</span>
+                </span>
+                <span>{result.ownerName}</span>
+                <span>{result.productName}</span>
+                <span>{result.variety}</span>
+                <span>{result.grade}</span>
+                <span>{result.weight.toLocaleString()}</span>
+                <span>{result.quantity.toLocaleString()}</span>
+                <span>{result.unitPrice.toLocaleString()}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
