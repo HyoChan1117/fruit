@@ -1,0 +1,85 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+// Singleton row: application code always reads/writes id = 1.
+model CompanyInfo {
+  id                 Int      @id @default(1)
+  introText          String
+  history            Json
+  address            String
+  latitude           Float?
+  longitude          Float?
+  phone              String
+  email              String
+  heroHeadline       String   @default("가장 신선한 순간을,\n선별합니다.")
+  heroSubcopy        String   @default("구천청과는 엄격한 기준으로 선별한 농산물을 산지에서 식탁까지 정직하게 전달하는 선과장입니다.")
+  heroTypewriterText String   @default("FRESH · SELECTED · DELIVERED")
+  businessHours      String?
+  holidays           String?
+  auctionTime        String?
+  updatedAt          DateTime @updatedAt
+}
+
+model Notice {
+  id        Int      @id @default(autoincrement())
+  title     String
+  body      String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    String
+  description String
+  spec        String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GalleryImage {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String
+  caption   String?
+  createdAt DateTime @default(now())
+}
+
+model Inquiry {
+  id        Int      @id @default(autoincrement())
+  name      String
+  contact   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model AuctionResult {
+  id          Int      @id @default(autoincrement())
+  auctionDate DateTime
+  ownerName   String
+  productName String
+  variety     String
+  grade       String
+  weight      Float
+  quantity    Int
+  unitPrice   Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

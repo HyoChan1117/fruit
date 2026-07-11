@@ -1,0 +1,10 @@
+node_modules/
+.env
+.claude/
+dist/
+build/
+*.log
+backend/uploads/
+frontend/node_modules/
+backend/node_modules/
+.DS_Store

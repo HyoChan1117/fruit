@@ -1,0 +1,81 @@
+export interface CompanyInfo {
+  id: number;
+  introText: string;
+  history: { year: string; month?: string; description: string }[];
+  address: string;
+  latitude: number | null;
+  longitude: number | null;
+  phone: string;
+  email: string;
+  heroHeadline: string;
+  heroSubcopy: string;
+  heroTypewriterText: string;
+  businessHours: string | null;
+  holidays: string | null;
+  auctionTime: string | null;
+  updatedAt: string;
+}
+
+export interface Notice {
+  id: number;
+  title: string;
+  body: string;
+  imageUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NoticeListResponse {
+  notices: Notice[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  category: string;
+  description: string;
+  spec: string | null;
+  imageUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GalleryImage {
+  id: number;
+  imageUrl: string;
+  caption: string | null;
+  createdAt: string;
+}
+
+export interface Inquiry {
+  id: number;
+  name: string;
+  contact: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface AuctionResult {
+  id: number;
+  auctionDate: string;
+  ownerName: string;
+  productName: string;
+  variety: string;
+  grade: string;
+  weight: number;
+  quantity: number;
+  unitPrice: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AuctionResultListResponse {
+  auctionResults: AuctionResult[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
