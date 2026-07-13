@@ -8,13 +8,12 @@ import { AuctionTicker } from "../../components/AuctionTicker";
 
 const AUCTION_RESULTS_POOL_SIZE = 15;
 
-const CURTAIN_OPEN_DELAY_MS = 350;
-const CURTAIN_DURATION_MS = 1000;
-const CURTAIN_DURATION_MOBILE_MS = 550;
+const CURTAIN_OPEN_DELAY_MS = 100;
+const CURTAIN_DURATION_MS = 1500;
+const CURTAIN_DURATION_MOBILE_MS = 900;
 const MOBILE_BREAKPOINT_QUERY = "(max-width: 768px)";
 const TYPEWRITER_SPEED_MS = 55;
 const HERO_READY_FAILSAFE_MS = 2000;
-const CURTAIN_SESSION_KEY = "gc_curtain_shown";
 
 const FALLBACK_HEADLINE = "가장 신선한 순간을,\n선별합니다.";
 const FALLBACK_SUBCOPY =
@@ -25,10 +24,7 @@ export function Home() {
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [recentNotices, setRecentNotices] = useState<Notice[]>([]);
   const [recentAuctionResults, setRecentAuctionResults] = useState<AuctionResult[]>([]);
-  const [skipIntro] = useState(() => sessionStorage.getItem(CURTAIN_SESSION_KEY) === "1");
-  const [curtainPhase, setCurtainPhase] = useState<"closed" | "opening" | "done">(
-    skipIntro ? "done" : "closed"
-  );
+  const [curtainPhase, setCurtainPhase] = useState<"closed" | "opening" | "done">("closed");
   const [typedText, setTypedText] = useState("");
   const [heroReady, setHeroReady] = useState(false);
 
@@ -47,27 +43,22 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    if (skipIntro || !heroReady) return;
+    if (!heroReady) return;
     const isMobile = window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches;
     const curtainDuration = isMobile ? CURTAIN_DURATION_MOBILE_MS : CURTAIN_DURATION_MS;
     const openTimer = setTimeout(() => setCurtainPhase("opening"), CURTAIN_OPEN_DELAY_MS);
     const doneTimer = setTimeout(() => {
       setCurtainPhase("done");
-      sessionStorage.setItem(CURTAIN_SESSION_KEY, "1");
     }, CURTAIN_OPEN_DELAY_MS + curtainDuration);
     return () => {
       clearTimeout(openTimer);
       clearTimeout(doneTimer);
     };
-  }, [heroReady, skipIntro]);
+  }, [heroReady]);
 
   const typewriterText = companyInfo?.heroTypewriterText ?? FALLBACK_TYPEWRITER_TEXT;
 
   useEffect(() => {
-    if (skipIntro) {
-      setTypedText(typewriterText);
-      return;
-    }
     if (curtainPhase !== "opening") return;
     let index = 0;
     const interval = setInterval(() => {
@@ -76,14 +67,15 @@ export function Home() {
       if (index >= typewriterText.length) clearInterval(interval);
     }, TYPEWRITER_SPEED_MS);
     return () => clearInterval(interval);
-  }, [curtainPhase, typewriterText, skipIntro]);
+  }, [curtainPhase, typewriterText]);
 
   return (
     <div>
       {curtainPhase !== "done" && (
         <div className={`curtain ${curtainPhase === "opening" ? "curtain--opening" : ""}`}>
-          <div className="curtain__panel curtain__panel--left" />
-          <div className="curtain__panel curtain__panel--right" />
+          <div className="curtain__panel curtain__panel--1" />
+          <div className="curtain__panel curtain__panel--2" />
+          <div className="curtain__panel curtain__panel--3" />
         </div>
       )}
 

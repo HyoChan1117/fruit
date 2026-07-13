@@ -477,27 +477,26 @@ a {
 
 .curtain__panel {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
+  inset: 0;
+  transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.curtain__panel--left {
-  left: 0;
+.curtain__panel--1 {
   background: var(--navy-900);
+  transition-delay: 0.3s;
 }
 
-.curtain__panel--right {
-  right: 0;
+.curtain__panel--2 {
+  background: var(--navy-800);
+  transition-delay: 0.15s;
+}
+
+.curtain__panel--3 {
   background: var(--navy-700);
+  transition-delay: 0s;
 }
 
-.curtain--opening .curtain__panel--left {
-  transform: translateX(-100%);
-}
-
-.curtain--opening .curtain__panel--right {
+.curtain--opening .curtain__panel {
   transform: translateX(100%);
 }
 
@@ -898,7 +897,19 @@ table td {
 
 @media (max-width: 768px) {
   .curtain__panel {
-    transition-duration: 0.55s;
+    transition-duration: 0.7s;
+  }
+
+  .curtain__panel--1 {
+    transition-delay: 0.2s;
+  }
+
+  .curtain__panel--2 {
+    transition-delay: 0.1s;
+  }
+
+  .curtain__panel--3 {
+    transition-delay: 0s;
   }
 
   .site-header {
@@ -915,6 +926,7 @@ table td {
 
   .hero {
     padding: 6rem 1.25rem 3.5rem;
+    background-position: right center, right center, right center;
   }
 
   .hero__headline {
