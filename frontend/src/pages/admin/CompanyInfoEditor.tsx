@@ -18,6 +18,12 @@ export function CompanyInfoEditor() {
   const [businessHours, setBusinessHours] = useState("");
   const [holidays, setHolidays] = useState("");
   const [auctionTime, setAuctionTime] = useState("");
+  const [valueCard1Title, setValueCard1Title] = useState("");
+  const [valueCard1Body, setValueCard1Body] = useState("");
+  const [valueCard2Title, setValueCard2Title] = useState("");
+  const [valueCard2Body, setValueCard2Body] = useState("");
+  const [valueCard3Title, setValueCard3Title] = useState("");
+  const [valueCard3Body, setValueCard3Body] = useState("");
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
@@ -35,6 +41,12 @@ export function CompanyInfoEditor() {
       setBusinessHours(info.businessHours ?? "");
       setHolidays(info.holidays ?? "");
       setAuctionTime(info.auctionTime ?? "");
+      setValueCard1Title(info.valueCard1Title);
+      setValueCard1Body(info.valueCard1Body);
+      setValueCard2Title(info.valueCard2Title);
+      setValueCard2Body(info.valueCard2Body);
+      setValueCard3Title(info.valueCard3Title);
+      setValueCard3Body(info.valueCard3Body);
     });
   }, []);
 
@@ -67,6 +79,12 @@ export function CompanyInfoEditor() {
       businessHours: businessHours || null,
       holidays: holidays || null,
       auctionTime: auctionTime || null,
+      valueCard1Title,
+      valueCard1Body,
+      valueCard2Title,
+      valueCard2Body,
+      valueCard3Title,
+      valueCard3Body,
     });
     setSaved(true);
   }
@@ -87,7 +105,23 @@ export function CompanyInfoEditor() {
         <label>타이핑 문구 (영문 짧은 슬로건)</label>
         <input value={heroTypewriterText} onChange={(e) => setHeroTypewriterText(e.target.value)} />
 
-        <h2>청과 소개</h2>
+        <h2>청과 소개 (홈 화면 카드 3개)</h2>
+        <label>카드 1 제목</label>
+        <input value={valueCard1Title} onChange={(e) => setValueCard1Title(e.target.value)} />
+        <label>카드 1 본문</label>
+        <textarea rows={2} value={valueCard1Body} onChange={(e) => setValueCard1Body(e.target.value)} />
+
+        <label>카드 2 제목</label>
+        <input value={valueCard2Title} onChange={(e) => setValueCard2Title(e.target.value)} />
+        <label>카드 2 본문</label>
+        <textarea rows={2} value={valueCard2Body} onChange={(e) => setValueCard2Body(e.target.value)} />
+
+        <label>카드 3 제목</label>
+        <input value={valueCard3Title} onChange={(e) => setValueCard3Title(e.target.value)} />
+        <label>카드 3 본문</label>
+        <textarea rows={2} value={valueCard3Body} onChange={(e) => setValueCard3Body(e.target.value)} />
+
+        <h2>청과 소개 페이지 문구</h2>
         <label>소개 문구</label>
         <textarea rows={5} value={introText} onChange={(e) => setIntroText(e.target.value)} />
 

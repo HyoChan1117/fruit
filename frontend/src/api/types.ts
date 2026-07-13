@@ -13,6 +13,12 @@ export interface CompanyInfo {
   businessHours: string | null;
   holidays: string | null;
   auctionTime: string | null;
+  valueCard1Title: string;
+  valueCard1Body: string;
+  valueCard2Title: string;
+  valueCard2Body: string;
+  valueCard3Title: string;
+  valueCard3Body: string;
   updatedAt: string;
 }
 

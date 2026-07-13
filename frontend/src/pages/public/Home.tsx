@@ -147,16 +147,16 @@ export function Home() {
         <h2 className="section__title">청과 소개</h2>
         <div className="summary-grid">
           <div className="summary-card">
-            <h3>정직한 선별</h3>
-            <p>엄격한 기준으로 농산물을 선별하여 품질을 보장합니다.</p>
+            <h3>{companyInfo?.valueCard1Title ?? "정직한 선별"}</h3>
+            <p>{companyInfo?.valueCard1Body ?? "엄격한 기준으로 농산물을 선별하여 품질을 보장합니다."}</p>
           </div>
           <div className="summary-card">
-            <h3>신선한 유통</h3>
-            <p>산지에서 소비자까지 신선함을 유지하며 빠르게 전달합니다.</p>
+            <h3>{companyInfo?.valueCard2Title ?? "신선한 유통"}</h3>
+            <p>{companyInfo?.valueCard2Body ?? "산지에서 소비자까지 신선함을 유지하며 빠르게 전달합니다."}</p>
           </div>
           <div className="summary-card">
-            <h3>믿을 수 있는 파트너</h3>
-            <p>{companyInfo?.introText ?? "구천청과 소개 문구를 관리자 페이지에서 입력해주세요."}</p>
+            <h3>{companyInfo?.valueCard3Title ?? "믿을 수 있는 파트너"}</h3>
+            <p>{companyInfo?.valueCard3Body ?? "구천청과 소개 문구를 관리자 페이지에서 입력해주세요."}</p>
           </div>
         </div>
       </section>

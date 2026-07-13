@@ -21,6 +21,12 @@ export async function updateCompanyInfo(req: Request, res: Response) {
     businessHours,
     holidays,
     auctionTime,
+    valueCard1Title,
+    valueCard1Body,
+    valueCard2Title,
+    valueCard2Body,
+    valueCard3Title,
+    valueCard3Body,
   } = req.body;
 
   const updated = await prisma.companyInfo.update({
@@ -39,6 +45,12 @@ export async function updateCompanyInfo(req: Request, res: Response) {
       businessHours,
       holidays,
       auctionTime,
+      valueCard1Title,
+      valueCard1Body,
+      valueCard2Title,
+      valueCard2Body,
+      valueCard3Title,
+      valueCard3Body,
     },
   });
 
