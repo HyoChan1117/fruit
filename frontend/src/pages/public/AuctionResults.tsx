@@ -4,17 +4,35 @@ import { AuctionResultListResponse } from "../../api/types";
 import { PageBanner } from "../../components/PageBanner";
 import { getTodayDateString } from "../../utils/date";
 
+const SEARCH_FIELDS = [
+  { value: "ownerName", label: "출하주" },
+  { value: "productName", label: "품목" },
+  { value: "variety", label: "품종" },
+] as const;
+
 export function AuctionResults() {
   const [data, setData] = useState<AuctionResultListResponse | null>(null);
   const [page, setPage] = useState(1);
   const [date, setDate] = useState(getTodayDateString());
+  const [searchField, setSearchField] = useState<(typeof SEARCH_FIELDS)[number]["value"]>("ownerName");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getAuctionResults(page, date).then(setData);
-  }, [page, date]);
+    getAuctionResults(page, date, searchField, search).then(setData);
+  }, [page, date, searchField, search]);
 
   function handleDateChange(value: string) {
     setDate(value);
+    setPage(1);
+  }
+
+  function handleSearchFieldChange(value: (typeof SEARCH_FIELDS)[number]["value"]) {
+    setSearchField(value);
+    setPage(1);
+  }
+
+  function handleSearchChange(value: string) {
+    setSearch(value);
     setPage(1);
   }
 
@@ -26,20 +44,44 @@ export function AuctionResults() {
     <>
       <PageBanner title="경매 결과" />
       <div className="page-content">
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
-          <label htmlFor="auction-date-filter">날짜</label>
-          <input
-            id="auction-date-filter"
-            type="date"
-            value={date}
-            onChange={(e) => handleDateChange(e.target.value)}
-          />
-          <button type="button" className="secondary" onClick={() => handleDateChange(getTodayDateString())}>
-            오늘
-          </button>
-          <button type="button" className="secondary" onClick={() => handleDateChange("")}>
-            전체 보기
-          </button>
+        <div className="list-filters">
+          <div className="list-filters__group">
+            <label htmlFor="auction-date-filter" className="list-filters__label">
+              날짜
+            </label>
+            <input
+              id="auction-date-filter"
+              type="date"
+              value={date}
+              onChange={(e) => handleDateChange(e.target.value)}
+            />
+            <button type="button" className="secondary" onClick={() => handleDateChange(getTodayDateString())}>
+              오늘
+            </button>
+            <button type="button" className="secondary" onClick={() => handleDateChange("")}>
+              전체 보기
+            </button>
+          </div>
+          <div className="list-filters__search">
+            <select
+              id="auction-search-field"
+              value={searchField}
+              onChange={(e) => handleSearchFieldChange(e.target.value as (typeof SEARCH_FIELDS)[number]["value"])}
+            >
+              {SEARCH_FIELDS.map((field) => (
+                <option key={field.value} value={field.value}>
+                  {field.label}
+                </option>
+              ))}
+            </select>
+            <input
+              id="auction-search-filter"
+              type="text"
+              placeholder="검색어 입력"
+              value={search}
+              onChange={(e) => handleSearchChange(e.target.value)}
+            />
+          </div>
         </div>
 
         <div className="table-scroll">
@@ -75,7 +117,11 @@ export function AuctionResults() {
             {data.auctionResults.length === 0 && (
               <tr>
                 <td colSpan={8}>
-                  {date ? "선택하신 날짜의 경매 결과가 없습니다." : "등록된 경매 결과가 없습니다."}
+                  {search
+                    ? "검색 결과가 없습니다."
+                    : date
+                    ? "선택하신 날짜의 경매 결과가 없습니다."
+                    : "등록된 경매 결과가 없습니다."}
                 </td>
               </tr>
             )}

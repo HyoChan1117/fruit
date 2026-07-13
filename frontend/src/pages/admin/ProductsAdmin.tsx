@@ -8,9 +8,8 @@ export function ProductsAdmin() {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [variety, setVariety] = useState("");
   const [description, setDescription] = useState("");
-  const [spec, setSpec] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   function loadProducts() {
@@ -22,18 +21,16 @@ export function ProductsAdmin() {
   function resetForm() {
     setEditingId(null);
     setName("");
-    setCategory("");
+    setVariety("");
     setDescription("");
-    setSpec("");
     setImageFile(null);
   }
 
   function startEdit(product: Product) {
     setEditingId(product.id);
     setName(product.name);
-    setCategory(product.category);
+    setVariety(product.variety);
     setDescription(product.description);
-    setSpec(product.spec ?? "");
     setImageFile(null);
   }
 
@@ -41,9 +38,8 @@ export function ProductsAdmin() {
     event.preventDefault();
     const formData = new FormData();
     formData.append("name", name);
-    formData.append("category", category);
+    formData.append("variety", variety);
     formData.append("description", description);
-    formData.append("spec", spec);
     if (imageFile) formData.append("image", imageFile);
 
     if (editingId) {
@@ -68,7 +64,7 @@ export function ProductsAdmin() {
       <form onSubmit={handleSubmit} style={{ maxWidth: 480, marginBottom: "2rem" }}>
         <h2>{editingId ? "품목 수정" : "새 품목"}</h2>
         <input placeholder="품목명" value={name} onChange={(e) => setName(e.target.value)} required />
-        <input placeholder="카테고리" value={category} onChange={(e) => setCategory(e.target.value)} required />
+        <input placeholder="품종명" value={variety} onChange={(e) => setVariety(e.target.value)} required />
         <textarea
           placeholder="설명"
           rows={4}
@@ -76,7 +72,6 @@ export function ProductsAdmin() {
           onChange={(e) => setDescription(e.target.value)}
           required
         />
-        <input placeholder="규격 (선택)" value={spec} onChange={(e) => setSpec(e.target.value)} />
         <ImageUploader onChange={setImageFile} />
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button type="submit">{editingId ? "수정 저장" : "등록"}</button>
@@ -93,7 +88,7 @@ export function ProductsAdmin() {
         <thead>
           <tr>
             <th>품목명</th>
-            <th>카테고리</th>
+            <th>품종명</th>
             <th></th>
           </tr>
         </thead>
@@ -106,7 +101,7 @@ export function ProductsAdmin() {
                 )}
                 {product.name}
               </td>
-              <td>{product.category}</td>
+              <td>{product.variety}</td>
               <td style={{ display: "flex", gap: "0.5rem" }}>
                 <button className="secondary" onClick={() => startEdit(product)}>
                   수정

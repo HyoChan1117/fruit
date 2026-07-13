@@ -1,19 +1,33 @@
 import { Request, Response } from "express";
+import { Prisma } from "@prisma/client";
 import prisma from "../prismaClient";
 import { buildImageUrl, deleteImageIfExists } from "../middleware/upload";
 
 const PAGE_SIZE = 10;
 
+const SEARCH_FIELDS = ["title", "body"] as const;
+type SearchField = (typeof SEARCH_FIELDS)[number];
+
+function buildSearchWhere(fieldParam: unknown, searchParam: unknown): Prisma.NoticeWhereInput | undefined {
+  if (typeof searchParam !== "string" || !searchParam.trim()) return undefined;
+  if (typeof fieldParam !== "string" || !SEARCH_FIELDS.includes(fieldParam as SearchField)) return undefined;
+
+  const field = fieldParam as SearchField;
+  return { [field]: { equals: searchParam.trim(), mode: "insensitive" } };
+}
+
 export async function listNotices(req: Request, res: Response) {
   const page = Math.max(1, Number(req.query.page) || 1);
+  const where = buildSearchWhere(req.query.searchField, req.query.search);
 
   const [notices, total] = await Promise.all([
     prisma.notice.findMany({
+      where,
       orderBy: { createdAt: "desc" },
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
     }),
-    prisma.notice.count(),
+    prisma.notice.count({ where }),
   ]);
 
   res.json({ notices, total, page, pageSize: PAGE_SIZE });

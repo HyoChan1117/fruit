@@ -1,8 +1,8 @@
 import { apiClient } from "./client";
 import { Product } from "./types";
 
-export function getProducts(category?: string) {
-  const query = category ? `?category=${encodeURIComponent(category)}` : "";
+export function getProducts(name?: string) {
+  const query = name ? `?name=${encodeURIComponent(name)}` : "";
   return apiClient.get<Product[]>(`/api/products${query}`);
 }
 

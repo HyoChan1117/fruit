@@ -13,7 +13,7 @@ export function Dashboard() {
   return (
     <div>
       <h1>관리자 대시보드</h1>
-      <ul>
+      <ul className="dashboard-menu">
         {SECTIONS.map((section) => (
           <li key={section.to}>
             <Link to={section.to}>{section.label}</Link>

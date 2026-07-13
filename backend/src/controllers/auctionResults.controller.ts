@@ -18,9 +18,23 @@ function buildDateWhere(dateParam: unknown): Prisma.AuctionResultWhereInput | un
   return { auctionDate: { gte: start, lt: end } };
 }
 
+const SEARCH_FIELDS = ["ownerName", "productName", "variety"] as const;
+type SearchField = (typeof SEARCH_FIELDS)[number];
+
+function buildSearchWhere(fieldParam: unknown, searchParam: unknown): Prisma.AuctionResultWhereInput | undefined {
+  if (typeof searchParam !== "string" || !searchParam.trim()) return undefined;
+  if (typeof fieldParam !== "string" || !SEARCH_FIELDS.includes(fieldParam as SearchField)) return undefined;
+
+  const field = fieldParam as SearchField;
+  return { [field]: { equals: searchParam.trim(), mode: "insensitive" } };
+}
+
 export async function listAuctionResults(req: Request, res: Response) {
   const page = Math.max(1, Number(req.query.page) || 1);
-  const where = buildDateWhere(req.query.date);
+  const dateWhere = buildDateWhere(req.query.date);
+  const searchWhere = buildSearchWhere(req.query.searchField, req.query.search);
+  const where: Prisma.AuctionResultWhereInput | undefined =
+    dateWhere && searchWhere ? { AND: [dateWhere, searchWhere] } : dateWhere ?? searchWhere;
 
   const [auctionResults, total] = await Promise.all([
     prisma.auctionResult.findMany({

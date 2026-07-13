@@ -40,9 +40,8 @@ export interface NoticeListResponse {
 export interface Product {
   id: number;
   name: string;
-  category: string;
+  variety: string;
   description: string;
-  spec: string | null;
   imageUrl: string | null;
   createdAt: string;
   updatedAt: string;

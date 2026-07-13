@@ -1,9 +1,11 @@
 import { apiClient } from "./client";
 import { AuctionResult, AuctionResultListResponse } from "./types";
 
-export function getAuctionResults(page = 1, date?: string) {
+export function getAuctionResults(page = 1, date?: string, searchField?: string, search?: string) {
   const dateQuery = date ? `&date=${date}` : "";
-  return apiClient.get<AuctionResultListResponse>(`/api/auction-results?page=${page}${dateQuery}`);
+  const searchQuery =
+    search && searchField ? `&searchField=${searchField}&search=${encodeURIComponent(search)}` : "";
+  return apiClient.get<AuctionResultListResponse>(`/api/auction-results?page=${page}${dateQuery}${searchQuery}`);
 }
 
 export function getRecentAuctionResults(limit = 5) {

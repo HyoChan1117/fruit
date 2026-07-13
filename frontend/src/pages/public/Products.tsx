@@ -7,26 +7,33 @@ import { PageBanner } from "../../components/PageBanner";
 
 export function Products() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [category, setCategory] = useState("");
+  const [names, setNames] = useState<string[]>([]);
+  const [name, setName] = useState("");
 
   useEffect(() => {
-    getProducts(category || undefined).then(setProducts);
-  }, [category]);
+    getProducts().then((all) => setNames(Array.from(new Set(all.map((p) => p.name)))));
+  }, []);
 
-  const categories = Array.from(new Set(products.map((p) => p.category)));
+  useEffect(() => {
+    getProducts(name || undefined).then(setProducts);
+  }, [name]);
 
   return (
     <>
       <PageBanner title="취급 품목" />
       <div className="page-content">
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="">전체 카테고리</option>
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
+        <div className="list-filters">
+          <div className="list-filters__group">
+            <select value={name} onChange={(e) => setName(e.target.value)}>
+              <option value="">전체 품목</option>
+              {names.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         <div className="card-grid" style={{ marginTop: "1rem" }}>
           {products.map((product) => (
@@ -34,7 +41,7 @@ export function Products() {
               {product.imageUrl && <img src={resolveImageUrl(product.imageUrl)} alt={product.name} />}
               <div className="card__body">
                 <strong>{product.name}</strong>
-                <p>{product.category}</p>
+                <p>{product.variety}</p>
               </div>
             </Link>
           ))}

@@ -3,10 +3,10 @@ import prisma from "../prismaClient";
 import { buildImageUrl, deleteImageIfExists } from "../middleware/upload";
 
 export async function listProducts(req: Request, res: Response) {
-  const category = typeof req.query.category === "string" ? req.query.category : undefined;
+  const name = typeof req.query.name === "string" ? req.query.name : undefined;
 
   const products = await prisma.product.findMany({
-    where: category ? { category } : undefined,
+    where: name ? { name } : undefined,
     orderBy: { createdAt: "desc" },
   });
 
@@ -22,11 +22,11 @@ export async function getProduct(req: Request, res: Response) {
 }
 
 export async function createProduct(req: Request, res: Response) {
-  const { name, category, description, spec } = req.body;
+  const { name, variety, description } = req.body;
   const imageUrl = req.file ? buildImageUrl("products", req.file.filename) : null;
 
   const product = await prisma.product.create({
-    data: { name, category, description, spec, imageUrl },
+    data: { name, variety, description, imageUrl },
   });
 
   res.status(201).json(product);
@@ -34,7 +34,7 @@ export async function createProduct(req: Request, res: Response) {
 
 export async function updateProduct(req: Request, res: Response) {
   const id = Number(req.params.id);
-  const { name, category, description, spec } = req.body;
+  const { name, variety, description } = req.body;
 
   const existing = await prisma.product.findUnique({ where: { id } });
   if (!existing) {
@@ -49,7 +49,7 @@ export async function updateProduct(req: Request, res: Response) {
 
   const updated = await prisma.product.update({
     where: { id },
-    data: { name, category, description, spec, imageUrl },
+    data: { name, variety, description, imageUrl },
   });
 
   res.json(updated);

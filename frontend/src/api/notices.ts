@@ -1,8 +1,10 @@
 import { apiClient } from "./client";
 import { Notice, NoticeListResponse } from "./types";
 
-export function getNotices(page = 1) {
-  return apiClient.get<NoticeListResponse>(`/api/notices?page=${page}`);
+export function getNotices(page = 1, searchField?: string, search?: string) {
+  const searchQuery =
+    search && searchField ? `&searchField=${searchField}&search=${encodeURIComponent(search)}` : "";
+  return apiClient.get<NoticeListResponse>(`/api/notices?page=${page}${searchQuery}`);
 }
 
 export function getNotice(id: number) {
