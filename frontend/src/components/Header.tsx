@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import logo from "../assets/logo.png";
+import logoWhite from "../assets/logo-white.png";
 
 const NAV_ITEMS = [
   { to: "/", label: "홈", end: true },
@@ -27,7 +29,9 @@ export function Header() {
 
   return (
     <header className={headerClassNames.join(" ")}>
-      <div className="site-header__brand">구천청과</div>
+      <Link to="/" className="site-header__brand" aria-label="구천청과 홈으로 이동">
+        <img src={isHome ? logoWhite : logo} alt="구천청과" className="site-header__logo" />
+      </Link>
       <button
         type="button"
         className={menuOpen ? "site-header__toggle site-header__toggle--open" : "site-header__toggle"}

@@ -1,10 +1,10 @@
 :root {
-  --navy-900: #0b2545;
-  --navy-800: #123a6c;
-  --navy-700: #1d4f8c;
-  --blue-500: #2f6fb0;
-  --blue-300: #6fa8dc;
-  --bg: #f7f9fb;
+  --navy-900: #4a0d16;
+  --navy-800: #7a1420;
+  --navy-700: #a3202c;
+  --blue-500: #c62839;
+  --blue-300: #f2a488;
+  --bg: #f9f6f5;
   --text: #1a1a1a;
 }
 
@@ -36,7 +36,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
+  padding: 0.1rem 2rem 1rem;
   background: #fff;
   color: var(--navy-800);
   border-bottom: 1px solid #e6e9ee;
@@ -47,13 +47,10 @@ a {
   top: 0;
   left: 0;
   right: 0;
-  background: transparent;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 100%);
   border-bottom: none;
 }
 
-.site-header--overlay .site-header__brand {
-  color: #fff;
-}
 
 .site-header--overlay .site-header__toggle span {
   background: #fff;
@@ -71,9 +68,14 @@ a {
 .site-header__brand {
   position: relative;
   z-index: 250;
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--navy-900);
+  display: flex;
+  align-items: center;
+}
+
+.site-header__logo {
+  height: 104px;
+  width: auto;
+  display: block;
 }
 
 .site-header__nav {
@@ -81,7 +83,7 @@ a {
 }
 
 .nav-link {
-  color: #45536b;
+  color: #6b4a48;
   font-weight: 500;
 }
 
@@ -94,7 +96,7 @@ a {
   padding: 0.5rem 1.25rem;
   background: var(--navy-800);
   color: #fff;
-  border-radius: 4px;
+  border-radius: 999px;
   font-weight: 600;
 }
 
@@ -145,7 +147,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(11, 37, 69, 0.97);
+  background: rgba(30, 8, 10, 0.97);
 }
 
 .site-header__nav--open .nav-link {
@@ -195,21 +197,24 @@ a {
 .site-footer {
   padding: 2rem 2rem 1.5rem;
   background: var(--navy-900);
-  color: #cdd9ea;
+  color: #ead7d3;
   font-size: 0.9rem;
   text-align: center;
 }
 
 .site-footer__info {
   margin-top: 0.5rem;
-  color: #9fb2cc;
+  color: #c9a29b;
   font-size: 0.85rem;
 }
 
 .hero {
   position: relative;
   padding: 6rem 2rem 5rem;
-  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 55%, var(--blue-500) 100%);
+  background:
+    linear-gradient(120deg, rgba(20, 8, 6, 0.7) 0%, rgba(20, 8, 6, 0.4) 45%, rgba(20, 8, 6, 0.1) 75%),
+    linear-gradient(to top, rgba(15, 6, 5, 0.6) 0%, rgba(15, 6, 5, 0) 45%),
+    url("../assets/hero-bg.png") center / cover no-repeat;
   color: #fff;
   overflow: hidden;
 }
@@ -233,7 +238,7 @@ a {
 
 .page-banner p {
   margin: 0.5rem 0 0;
-  color: #d7e2f2;
+  color: #f0ddd6;
 }
 
 .hero::after {
@@ -268,7 +273,7 @@ a {
 
 .hero__subcopy {
   font-size: 1.05rem;
-  color: #d7e2f2;
+  color: #f0ddd6;
   max-width: 520px;
   margin: 0 0 2rem;
 }
@@ -281,7 +286,7 @@ a {
   padding: 0;
   margin: -1rem 0 2rem;
   font-size: 0.95rem;
-  color: #d7e2f2;
+  color: #f0ddd6;
 }
 
 .hero__info strong {
@@ -617,7 +622,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(11, 37, 69, 0.92);
+  background: rgba(30, 8, 10, 0.92);
   padding: 2rem;
 }
 
@@ -812,7 +817,11 @@ table td {
 
 @media (max-width: 768px) {
   .site-header {
-    padding: 1rem 1.25rem;
+    padding: 0.1rem 1.25rem 1rem;
+  }
+
+  .site-header__logo {
+    height: 68px;
   }
 
   .quick-nav {
