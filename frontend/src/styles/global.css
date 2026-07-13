@@ -358,6 +358,13 @@ a {
   gap: 1.5rem;
 }
 
+.ticker__units {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #8a6a67;
+  margin-bottom: 0.4rem;
+}
+
 .ticker__header,
 .ticker__row {
   display: grid;

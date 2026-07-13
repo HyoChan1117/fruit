@@ -43,6 +43,9 @@ export function AuctionResults() {
         </div>
 
         <div className="table-scroll">
+        <p style={{ textAlign: "right", fontSize: "0.85rem", color: "#8a6a67", marginBottom: "0.5rem" }}>
+          (단위: 무게 - kg, 단가 - 원)
+        </p>
         <table>
           <thead>
             <tr>
@@ -51,9 +54,9 @@ export function AuctionResults() {
               <th>품목</th>
               <th>품종</th>
               <th>등급</th>
-              <th>무게(kg)</th>
+              <th>무게</th>
               <th>수량</th>
-              <th>단가(원)</th>
+              <th>단가</th>
             </tr>
           </thead>
           <tbody>

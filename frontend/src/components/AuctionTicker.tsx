@@ -57,15 +57,16 @@ export function AuctionTicker({ results }: AuctionTickerProps) {
 
   return (
     <div className="ticker">
+      <div className="ticker__units">(단위: 무게 - kg, 단가 - 원)</div>
       <div className="ticker__header">
         <span>경매일자</span>
         <span>출하주</span>
         <span>품목</span>
         <span>품종</span>
         <span>등급</span>
-        <span>무게(kg)</span>
+        <span>무게</span>
         <span>수량</span>
-        <span>단가(원)</span>
+        <span>단가</span>
       </div>
       <div className="ticker__viewport" style={{ height: rowHeight * VISIBLE_ROWS }}>
         <div
