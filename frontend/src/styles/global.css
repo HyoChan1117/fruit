@@ -31,6 +31,8 @@ a {
 }
 
 .site-header {
+  position: relative;
+  z-index: 300;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,16 +42,42 @@ a {
   border-bottom: 1px solid #e6e9ee;
 }
 
+.site-header--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border-bottom: none;
+}
+
+.site-header--overlay .site-header__brand {
+  color: #fff;
+}
+
+.site-header--overlay .site-header__toggle span {
+  background: #fff;
+}
+
+.site-header--menu-open {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+.site-header--menu-open .site-header__brand {
+  color: #fff;
+}
+
 .site-header__brand {
+  position: relative;
+  z-index: 250;
   font-size: 1.4rem;
   font-weight: 700;
   color: var(--navy-900);
 }
 
 .site-header__nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
+  display: none;
 }
 
 .nav-link {
@@ -71,7 +99,9 @@ a {
 }
 
 .site-header__toggle {
-  display: none;
+  position: relative;
+  z-index: 250;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
@@ -87,6 +117,50 @@ a {
   height: 2px;
   background: var(--navy-900);
   border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.site-header__toggle--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.site-header__toggle--open span:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header__toggle--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.site-header__toggle--open span {
+  background: #fff;
+}
+
+.site-header__nav--open {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(11, 37, 69, 0.97);
+}
+
+.site-header__nav--open .nav-link {
+  color: #fff;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.site-header__nav--open .nav-link--active {
+  color: var(--blue-300);
+}
+
+.site-header__nav--open .site-header__cta {
+  margin-top: 1rem;
+  font-size: 1.1rem;
 }
 
 .quick-nav {
@@ -738,39 +812,7 @@ table td {
 
 @media (max-width: 768px) {
   .site-header {
-    flex-wrap: wrap;
     padding: 1rem 1.25rem;
-  }
-
-  .site-header__toggle {
-    display: flex;
-  }
-
-  .site-header__nav {
-    display: none;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    width: 100%;
-    order: 3;
-    margin-top: 1rem;
-    border-top: 1px solid #e6e9ee;
-  }
-
-  .site-header__nav--open {
-    display: flex;
-  }
-
-  .site-header__nav .nav-link,
-  .site-header__nav .site-header__cta {
-    padding: 0.85rem 0.25rem;
-    border-bottom: 1px solid #f0f2f5;
-  }
-
-  .site-header__nav .site-header__cta {
-    text-align: center;
-    margin-top: 0.5rem;
-    border: none;
   }
 
   .quick-nav {

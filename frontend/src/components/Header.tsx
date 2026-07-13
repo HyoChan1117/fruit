@@ -19,12 +19,18 @@ export function Header() {
     setMenuOpen(false);
   }, [location.pathname]);
 
+  const isHome = location.pathname === "/";
+
+  const headerClassNames = ["site-header"];
+  if (isHome) headerClassNames.push("site-header--overlay");
+  if (menuOpen) headerClassNames.push("site-header--menu-open");
+
   return (
-    <header className="site-header">
+    <header className={headerClassNames.join(" ")}>
       <div className="site-header__brand">구천청과</div>
       <button
         type="button"
-        className="site-header__toggle"
+        className={menuOpen ? "site-header__toggle site-header__toggle--open" : "site-header__toggle"}
         aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
         aria-expanded={menuOpen}
         onClick={() => setMenuOpen((open) => !open)}
