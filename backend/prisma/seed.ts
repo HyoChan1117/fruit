@@ -25,10 +25,7 @@ async function main() {
     create: {
       id: 1,
       introText: "구천청과 소개 문구를 관리자 페이지에서 입력해주세요.",
-      history: [],
       address: "주소를 입력해주세요.",
-      phone: "000-0000-0000",
-      email: "contact@example.com",
     },
   });
 

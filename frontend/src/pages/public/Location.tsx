@@ -22,6 +22,25 @@ export function Location() {
         ) : (
           <p>관리자가 아직 좌표를 등록하지 않았습니다.</p>
         )}
+
+        <dl className="location-info">
+          <div className="location-info__row">
+            <dt>주소</dt>
+            <dd>{companyInfo.address}</dd>
+          </div>
+          {companyInfo.nearbyInfo && (
+            <div className="location-info__row">
+              <dt>인근</dt>
+              <dd>{companyInfo.nearbyInfo}</dd>
+            </div>
+          )}
+          {companyInfo.parkingInfo && (
+            <div className="location-info__row">
+              <dt>주차</dt>
+              <dd>{companyInfo.parkingInfo}</dd>
+            </div>
+          )}
+        </dl>
       </div>
     </>
   );

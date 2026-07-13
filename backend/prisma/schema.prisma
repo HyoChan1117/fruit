@@ -19,12 +19,11 @@ model Admin {
 model CompanyInfo {
   id                 Int      @id @default(1)
   introText          String
-  history            Json
   address            String
+  nearbyInfo         String?
+  parkingInfo        String?
   latitude           Float?
   longitude          Float?
-  phone              String
-  email              String
   heroHeadline       String   @default("가장 신선한 순간을,\n선별합니다.")
   heroSubcopy        String   @default("구천청과는 엄격한 기준으로 선별한 농산물을 산지에서 식탁까지 정직하게 전달하는 선과장입니다.")
   heroTypewriterText String   @default("FRESH · SELECTED · DELIVERED")

@@ -1,12 +1,11 @@
 export interface CompanyInfo {
   id: number;
   introText: string;
-  history: { year: string; month?: string; description: string }[];
   address: string;
+  nearbyInfo: string | null;
+  parkingInfo: string | null;
   latitude: number | null;
   longitude: number | null;
-  phone: string;
-  email: string;
   heroHeadline: string;
   heroSubcopy: string;
   heroTypewriterText: string;

@@ -10,6 +10,7 @@ import { productsPublicRouter, productsAdminRouter } from "./routes/products.rou
 import { galleryPublicRouter, galleryAdminRouter } from "./routes/gallery.routes";
 import { inquiriesPublicRouter, inquiriesAdminRouter } from "./routes/inquiries.routes";
 import { auctionResultsPublicRouter, auctionResultsAdminRouter } from "./routes/auctionResults.routes";
+import { mapPublicRouter } from "./routes/map.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { UPLOAD_ROOT } from "./middleware/upload";
 
@@ -33,6 +34,7 @@ app.use("/api/products", productsPublicRouter);
 app.use("/api/gallery", galleryPublicRouter);
 app.use("/api/inquiries", inquiriesPublicRouter);
 app.use("/api/auction-results", auctionResultsPublicRouter);
+app.use("/api/map", mapPublicRouter);
 
 app.use("/api/admin/company-info", companyInfoAdminRouter);
 app.use("/api/admin/notices", noticesAdminRouter);

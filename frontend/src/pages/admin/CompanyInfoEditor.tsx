@@ -2,16 +2,13 @@ import { FormEvent, useEffect, useState } from "react";
 import { getCompanyInfo, updateCompanyInfo } from "../../api/companyInfo";
 import { CompanyInfo } from "../../api/types";
 
-type HistoryEntry = { year: string; month?: string; description: string };
-
 export function CompanyInfoEditor() {
   const [introText, setIntroText] = useState("");
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [address, setAddress] = useState("");
+  const [nearbyInfo, setNearbyInfo] = useState("");
+  const [parkingInfo, setParkingInfo] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
   const [heroHeadline, setHeroHeadline] = useState("");
   const [heroSubcopy, setHeroSubcopy] = useState("");
   const [heroTypewriterText, setHeroTypewriterText] = useState("");
@@ -29,12 +26,11 @@ export function CompanyInfoEditor() {
   useEffect(() => {
     getCompanyInfo().then((info: CompanyInfo) => {
       setIntroText(info.introText);
-      setHistory(info.history ?? []);
       setAddress(info.address);
+      setNearbyInfo(info.nearbyInfo ?? "");
+      setParkingInfo(info.parkingInfo ?? "");
       setLatitude(info.latitude != null ? String(info.latitude) : "");
       setLongitude(info.longitude != null ? String(info.longitude) : "");
-      setPhone(info.phone);
-      setEmail(info.email);
       setHeroHeadline(info.heroHeadline);
       setHeroSubcopy(info.heroSubcopy);
       setHeroTypewriterText(info.heroTypewriterText);
@@ -50,29 +46,16 @@ export function CompanyInfoEditor() {
     });
   }, []);
 
-  function updateHistoryEntry(index: number, field: keyof HistoryEntry, value: string) {
-    setHistory((prev) => prev.map((entry, i) => (i === index ? { ...entry, [field]: value } : entry)));
-  }
-
-  function addHistoryEntry() {
-    setHistory((prev) => [...prev, { year: "", month: "", description: "" }]);
-  }
-
-  function removeHistoryEntry(index: number) {
-    setHistory((prev) => prev.filter((_, i) => i !== index));
-  }
-
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setSaved(false);
     await updateCompanyInfo({
       introText,
-      history,
       address,
+      nearbyInfo: nearbyInfo || null,
+      parkingInfo: parkingInfo || null,
       latitude: latitude ? Number(latitude) : null,
       longitude: longitude ? Number(longitude) : null,
-      phone,
-      email,
       heroHeadline,
       heroSubcopy,
       heroTypewriterText,
@@ -91,7 +74,7 @@ export function CompanyInfoEditor() {
 
   return (
     <div>
-      <h1>청과 소개/연혁 관리</h1>
+      <h1>청과 소개 관리</h1>
       {saved && <p>저장되었습니다.</p>}
 
       <form onSubmit={handleSubmit} style={{ maxWidth: 640 }}>
@@ -125,38 +108,14 @@ export function CompanyInfoEditor() {
         <label>소개 문구</label>
         <textarea rows={5} value={introText} onChange={(e) => setIntroText(e.target.value)} />
 
-        <label>연혁</label>
-        {history.map((entry, index) => (
-          <div key={index} style={{ display: "flex", gap: "0.5rem" }}>
-            <input
-              placeholder="연도"
-              value={entry.year}
-              onChange={(e) => updateHistoryEntry(index, "year", e.target.value)}
-              style={{ width: 80 }}
-            />
-            <input
-              placeholder="월"
-              value={entry.month ?? ""}
-              onChange={(e) => updateHistoryEntry(index, "month", e.target.value)}
-              style={{ width: 60 }}
-            />
-            <input
-              placeholder="내용"
-              value={entry.description}
-              onChange={(e) => updateHistoryEntry(index, "description", e.target.value)}
-              style={{ flex: 1 }}
-            />
-            <button type="button" className="danger" onClick={() => removeHistoryEntry(index)}>
-              삭제
-            </button>
-          </div>
-        ))}
-        <button type="button" className="secondary" onClick={addHistoryEntry}>
-          연혁 추가
-        </button>
-
         <label>주소</label>
         <input value={address} onChange={(e) => setAddress(e.target.value)} />
+
+        <label>인근 (예: 구천보건지소 맞은편, 구천면사무소 인근)</label>
+        <input value={nearbyInfo} onChange={(e) => setNearbyInfo(e.target.value)} />
+
+        <label>주차 (예: 무료 주차 가능)</label>
+        <input value={parkingInfo} onChange={(e) => setParkingInfo(e.target.value)} />
 
         <label>위도 / 경도 (네이버 지도용)</label>
         <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -164,11 +123,6 @@ export function CompanyInfoEditor() {
           <input placeholder="경도" value={longitude} onChange={(e) => setLongitude(e.target.value)} />
         </div>
 
-        <label>전화번호</label>
-        <input value={phone} onChange={(e) => setPhone(e.target.value)} />
-
-        <label>이메일</label>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} />
 
         <h2>운영 안내</h2>
         <label>영업시간 (예: 매일 05:00 - 18:00)</label>

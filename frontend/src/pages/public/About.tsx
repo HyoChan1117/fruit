@@ -18,21 +18,20 @@ export function About() {
       <div className="page-content">
         <p>{companyInfo.introText}</p>
 
-        <h2>연혁</h2>
-        <ul>
-          {companyInfo.history.map((entry, index) => (
-            <li key={index}>
-              {entry.year}
-              {entry.month ? `.${entry.month}` : ""} — {entry.description}
-            </li>
-          ))}
-          {companyInfo.history.length === 0 && <p>등록된 연혁이 없습니다.</p>}
-        </ul>
-
-        <h2>연락처</h2>
-        <p>주소: {companyInfo.address}</p>
-        <p>전화: {companyInfo.phone}</p>
-        <p>이메일: {companyInfo.email}</p>
+        <div className="summary-grid">
+          <div className="summary-card">
+            <h3>{companyInfo.valueCard1Title}</h3>
+            <p>{companyInfo.valueCard1Body}</p>
+          </div>
+          <div className="summary-card">
+            <h3>{companyInfo.valueCard2Title}</h3>
+            <p>{companyInfo.valueCard2Body}</p>
+          </div>
+          <div className="summary-card">
+            <h3>{companyInfo.valueCard3Title}</h3>
+            <p>{companyInfo.valueCard3Body}</p>
+          </div>
+        </div>
       </div>
     </>
   );

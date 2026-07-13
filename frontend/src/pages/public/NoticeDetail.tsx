@@ -19,11 +19,15 @@ export function NoticeDetail() {
     <>
       <PageBanner title={notice.title} subtitle={new Date(notice.createdAt).toLocaleDateString()} />
       <div className="page-content">
-        <Link to="/notices">← 목록으로</Link>
         {notice.imageUrl && (
           <img src={resolveImageUrl(notice.imageUrl)} alt={notice.title} style={{ maxWidth: "100%" }} />
         )}
         <p style={{ whiteSpace: "pre-wrap" }}>{notice.body}</p>
+        <div className="detail-back">
+          <Link to="/notices" className="btn-back">
+            ← 목록으로
+          </Link>
+        </div>
       </div>
     </>
   );

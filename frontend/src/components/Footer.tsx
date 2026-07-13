@@ -16,9 +16,7 @@ export function Footer() {
       <p>구천청과</p>
       {companyInfo && (
         <>
-          <p>
-            {companyInfo.address} · {companyInfo.phone}
-          </p>
+          <p>{companyInfo.address}</p>
           {(companyInfo.businessHours || companyInfo.holidays || companyInfo.auctionTime) && (
             <p className="site-footer__info">
               {[

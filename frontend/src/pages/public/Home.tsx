@@ -10,8 +10,11 @@ const AUCTION_RESULTS_POOL_SIZE = 15;
 
 const CURTAIN_OPEN_DELAY_MS = 350;
 const CURTAIN_DURATION_MS = 1000;
+const CURTAIN_DURATION_MOBILE_MS = 550;
+const MOBILE_BREAKPOINT_QUERY = "(max-width: 768px)";
 const TYPEWRITER_SPEED_MS = 55;
 const HERO_READY_FAILSAFE_MS = 2000;
+const CURTAIN_SESSION_KEY = "gc_curtain_shown";
 
 const FALLBACK_HEADLINE = "가장 신선한 순간을,\n선별합니다.";
 const FALLBACK_SUBCOPY =
@@ -22,7 +25,10 @@ export function Home() {
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [recentNotices, setRecentNotices] = useState<Notice[]>([]);
   const [recentAuctionResults, setRecentAuctionResults] = useState<AuctionResult[]>([]);
-  const [curtainPhase, setCurtainPhase] = useState<"closed" | "opening" | "done">("closed");
+  const [skipIntro] = useState(() => sessionStorage.getItem(CURTAIN_SESSION_KEY) === "1");
+  const [curtainPhase, setCurtainPhase] = useState<"closed" | "opening" | "done">(
+    skipIntro ? "done" : "closed"
+  );
   const [typedText, setTypedText] = useState("");
   const [heroReady, setHeroReady] = useState(false);
 
@@ -41,21 +47,27 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    if (!heroReady) return;
+    if (skipIntro || !heroReady) return;
+    const isMobile = window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches;
+    const curtainDuration = isMobile ? CURTAIN_DURATION_MOBILE_MS : CURTAIN_DURATION_MS;
     const openTimer = setTimeout(() => setCurtainPhase("opening"), CURTAIN_OPEN_DELAY_MS);
-    const doneTimer = setTimeout(
-      () => setCurtainPhase("done"),
-      CURTAIN_OPEN_DELAY_MS + CURTAIN_DURATION_MS
-    );
+    const doneTimer = setTimeout(() => {
+      setCurtainPhase("done");
+      sessionStorage.setItem(CURTAIN_SESSION_KEY, "1");
+    }, CURTAIN_OPEN_DELAY_MS + curtainDuration);
     return () => {
       clearTimeout(openTimer);
       clearTimeout(doneTimer);
     };
-  }, [heroReady]);
+  }, [heroReady, skipIntro]);
 
   const typewriterText = companyInfo?.heroTypewriterText ?? FALLBACK_TYPEWRITER_TEXT;
 
   useEffect(() => {
+    if (skipIntro) {
+      setTypedText(typewriterText);
+      return;
+    }
     if (curtainPhase !== "opening") return;
     let index = 0;
     const interval = setInterval(() => {
@@ -64,7 +76,7 @@ export function Home() {
       if (index >= typewriterText.length) clearInterval(interval);
     }, TYPEWRITER_SPEED_MS);
     return () => clearInterval(interval);
-  }, [curtainPhase, typewriterText]);
+  }, [curtainPhase, typewriterText, skipIntro]);
 
   return (
     <div>
@@ -128,7 +140,7 @@ export function Home() {
 
       <nav className="quick-nav">
         <Link to="/notices">공지사항</Link>
-        <Link to="/products">취급 품목</Link>
+        <Link to="/about">청과소개</Link>
         <Link to="/gallery">갤러리</Link>
         <Link to="/location">찾아오시는 길</Link>
       </nav>
@@ -141,24 +153,6 @@ export function Home() {
           </Link>
         </div>
         <AuctionTicker results={recentAuctionResults} />
-      </section>
-
-      <section className="section">
-        <h2 className="section__title">청과 소개</h2>
-        <div className="summary-grid">
-          <div className="summary-card">
-            <h3>{companyInfo?.valueCard1Title ?? "정직한 선별"}</h3>
-            <p>{companyInfo?.valueCard1Body ?? "엄격한 기준으로 농산물을 선별하여 품질을 보장합니다."}</p>
-          </div>
-          <div className="summary-card">
-            <h3>{companyInfo?.valueCard2Title ?? "신선한 유통"}</h3>
-            <p>{companyInfo?.valueCard2Body ?? "산지에서 소비자까지 신선함을 유지하며 빠르게 전달합니다."}</p>
-          </div>
-          <div className="summary-card">
-            <h3>{companyInfo?.valueCard3Title ?? "믿을 수 있는 파트너"}</h3>
-            <p>{companyInfo?.valueCard3Body ?? "구천청과 소개 문구를 관리자 페이지에서 입력해주세요."}</p>
-          </div>
-        </div>
       </section>
 
       <section className="section">
