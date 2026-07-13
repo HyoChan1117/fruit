@@ -11,6 +11,7 @@ const AUCTION_RESULTS_POOL_SIZE = 15;
 const CURTAIN_OPEN_DELAY_MS = 350;
 const CURTAIN_DURATION_MS = 1000;
 const TYPEWRITER_SPEED_MS = 55;
+const HERO_READY_FAILSAFE_MS = 2000;
 
 const FALLBACK_HEADLINE = "가장 신선한 순간을,\n선별합니다.";
 const FALLBACK_SUBCOPY =
@@ -23,14 +24,24 @@ export function Home() {
   const [recentAuctionResults, setRecentAuctionResults] = useState<AuctionResult[]>([]);
   const [curtainPhase, setCurtainPhase] = useState<"closed" | "opening" | "done">("closed");
   const [typedText, setTypedText] = useState("");
+  const [heroReady, setHeroReady] = useState(false);
 
   useEffect(() => {
-    getCompanyInfo().then(setCompanyInfo);
+    getCompanyInfo().then((info) => {
+      setCompanyInfo(info);
+      setHeroReady(true);
+    });
     getNotices(1).then((res) => setRecentNotices(res.notices.slice(0, 5)));
     getRecentAuctionResults(AUCTION_RESULTS_POOL_SIZE).then(setRecentAuctionResults);
   }, []);
 
   useEffect(() => {
+    const failsafeTimer = setTimeout(() => setHeroReady(true), HERO_READY_FAILSAFE_MS);
+    return () => clearTimeout(failsafeTimer);
+  }, []);
+
+  useEffect(() => {
+    if (!heroReady) return;
     const openTimer = setTimeout(() => setCurtainPhase("opening"), CURTAIN_OPEN_DELAY_MS);
     const doneTimer = setTimeout(
       () => setCurtainPhase("done"),
@@ -40,7 +51,7 @@ export function Home() {
       clearTimeout(openTimer);
       clearTimeout(doneTimer);
     };
-  }, []);
+  }, [heroReady]);
 
   const typewriterText = companyInfo?.heroTypewriterText ?? FALLBACK_TYPEWRITER_TEXT;
 
