@@ -1,9 +1,10 @@
 import { FormEvent, useEffect, useState } from "react";
-import { getCompanyInfo, updateCompanyInfo } from "../../api/companyInfo";
+import { getCompanyInfo, updateCompanyInfo, updateAboutImage } from "../../api/companyInfo";
+import { resolveImageUrl } from "../../api/client";
 import { CompanyInfo } from "../../api/types";
+import { ImageUploader } from "../../components/ImageUploader";
 
 export function CompanyInfoEditor() {
-  const [introText, setIntroText] = useState("");
   const [address, setAddress] = useState("");
   const [nearbyInfo, setNearbyInfo] = useState("");
   const [parkingInfo, setParkingInfo] = useState("");
@@ -15,17 +16,13 @@ export function CompanyInfoEditor() {
   const [businessHours, setBusinessHours] = useState("");
   const [holidays, setHolidays] = useState("");
   const [auctionTime, setAuctionTime] = useState("");
-  const [valueCard1Title, setValueCard1Title] = useState("");
-  const [valueCard1Body, setValueCard1Body] = useState("");
-  const [valueCard2Title, setValueCard2Title] = useState("");
-  const [valueCard2Body, setValueCard2Body] = useState("");
-  const [valueCard3Title, setValueCard3Title] = useState("");
-  const [valueCard3Body, setValueCard3Body] = useState("");
+  const [aboutText, setAboutText] = useState("");
+  const [aboutImageUrl, setAboutImageUrl] = useState<string | null>(null);
+  const [aboutImageFile, setAboutImageFile] = useState<File | null>(null);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     getCompanyInfo().then((info: CompanyInfo) => {
-      setIntroText(info.introText);
       setAddress(info.address);
       setNearbyInfo(info.nearbyInfo ?? "");
       setParkingInfo(info.parkingInfo ?? "");
@@ -37,12 +34,8 @@ export function CompanyInfoEditor() {
       setBusinessHours(info.businessHours ?? "");
       setHolidays(info.holidays ?? "");
       setAuctionTime(info.auctionTime ?? "");
-      setValueCard1Title(info.valueCard1Title);
-      setValueCard1Body(info.valueCard1Body);
-      setValueCard2Title(info.valueCard2Title);
-      setValueCard2Body(info.valueCard2Body);
-      setValueCard3Title(info.valueCard3Title);
-      setValueCard3Body(info.valueCard3Body);
+      setAboutText(info.aboutText ?? "");
+      setAboutImageUrl(info.aboutImageUrl);
     });
   }, []);
 
@@ -50,7 +43,6 @@ export function CompanyInfoEditor() {
     event.preventDefault();
     setSaved(false);
     await updateCompanyInfo({
-      introText,
       address,
       nearbyInfo: nearbyInfo || null,
       parkingInfo: parkingInfo || null,
@@ -62,13 +54,17 @@ export function CompanyInfoEditor() {
       businessHours: businessHours || null,
       holidays: holidays || null,
       auctionTime: auctionTime || null,
-      valueCard1Title,
-      valueCard1Body,
-      valueCard2Title,
-      valueCard2Body,
-      valueCard3Title,
-      valueCard3Body,
+      aboutText: aboutText || null,
     });
+
+    if (aboutImageFile) {
+      const formData = new FormData();
+      formData.append("aboutImage", aboutImageFile);
+      const updated = await updateAboutImage(formData);
+      setAboutImageUrl(updated.aboutImageUrl);
+      setAboutImageFile(null);
+    }
+
     setSaved(true);
   }
 
@@ -88,25 +84,14 @@ export function CompanyInfoEditor() {
         <label>타이핑 문구 (영문 짧은 슬로건)</label>
         <input value={heroTypewriterText} onChange={(e) => setHeroTypewriterText(e.target.value)} />
 
-        <h2>청과 소개 (홈 화면 카드 3개)</h2>
-        <label>카드 1 제목</label>
-        <input value={valueCard1Title} onChange={(e) => setValueCard1Title(e.target.value)} />
-        <label>카드 1 본문</label>
-        <textarea rows={2} value={valueCard1Body} onChange={(e) => setValueCard1Body(e.target.value)} />
-
-        <label>카드 2 제목</label>
-        <input value={valueCard2Title} onChange={(e) => setValueCard2Title(e.target.value)} />
-        <label>카드 2 본문</label>
-        <textarea rows={2} value={valueCard2Body} onChange={(e) => setValueCard2Body(e.target.value)} />
-
-        <label>카드 3 제목</label>
-        <input value={valueCard3Title} onChange={(e) => setValueCard3Title(e.target.value)} />
-        <label>카드 3 본문</label>
-        <textarea rows={2} value={valueCard3Body} onChange={(e) => setValueCard3Body(e.target.value)} />
-
         <h2>청과 소개 페이지 문구</h2>
-        <label>소개 문구</label>
-        <textarea rows={5} value={introText} onChange={(e) => setIntroText(e.target.value)} />
+        <label>소개 이미지 + 글</label>
+        <textarea rows={4} value={aboutText} onChange={(e) => setAboutText(e.target.value)} />
+        <ImageUploader
+          label="소개 이미지"
+          currentImageUrl={resolveImageUrl(aboutImageUrl)}
+          onChange={setAboutImageFile}
+        />
 
         <label>주소</label>
         <input value={address} onChange={(e) => setAddress(e.target.value)} />

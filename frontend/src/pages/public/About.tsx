@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCompanyInfo } from "../../api/companyInfo";
+import { resolveImageUrl } from "../../api/client";
 import { CompanyInfo } from "../../api/types";
 import { PageBanner } from "../../components/PageBanner";
 
@@ -16,22 +17,18 @@ export function About() {
     <>
       <PageBanner title="청과 소개" />
       <div className="page-content">
-        <p>{companyInfo.introText}</p>
-
-        <div className="summary-grid">
-          <div className="summary-card">
-            <h3>{companyInfo.valueCard1Title}</h3>
-            <p>{companyInfo.valueCard1Body}</p>
+        {(companyInfo.aboutImageUrl || companyInfo.aboutText) && (
+          <div className="about-feature">
+            {companyInfo.aboutImageUrl && (
+              <img
+                src={resolveImageUrl(companyInfo.aboutImageUrl)}
+                alt="청과 소개"
+                className="about-feature__image"
+              />
+            )}
+            {companyInfo.aboutText && <p className="about-feature__text">{companyInfo.aboutText}</p>}
           </div>
-          <div className="summary-card">
-            <h3>{companyInfo.valueCard2Title}</h3>
-            <p>{companyInfo.valueCard2Body}</p>
-          </div>
-          <div className="summary-card">
-            <h3>{companyInfo.valueCard3Title}</h3>
-            <p>{companyInfo.valueCard3Body}</p>
-          </div>
-        </div>
+        )}
       </div>
     </>
   );

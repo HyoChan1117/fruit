@@ -18,6 +18,8 @@ export interface CompanyInfo {
   valueCard2Body: string;
   valueCard3Title: string;
   valueCard3Body: string;
+  aboutText: string | null;
+  aboutImageUrl: string | null;
   updatedAt: string;
 }
 
