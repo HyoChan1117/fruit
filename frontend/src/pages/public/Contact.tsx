@@ -1,22 +1,48 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { createInquiry } from "../../api/inquiries";
 import { PageBanner } from "../../components/PageBanner";
 
+const CONTACT_PREFIX = "010-";
+
+function formatContact(rest: string) {
+  return CONTACT_PREFIX + (rest.length > 4 ? `${rest.slice(0, 4)}-${rest.slice(4)}` : rest);
+}
+
 export function Contact() {
   const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
+  const [contact, setContact] = useState(CONTACT_PREFIX);
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const contactInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const el = contactInputRef.current;
+    if (el && document.activeElement === el) {
+      el.setSelectionRange(contact.length, contact.length);
+    }
+  }, [contact]);
+
+  function handleContactChange(event: ChangeEvent<HTMLInputElement>) {
+    const raw = event.target.value;
+    const rest = (raw.startsWith(CONTACT_PREFIX) ? raw.slice(CONTACT_PREFIX.length) : raw)
+      .replace(/\D/g, "")
+      .slice(0, 8);
+    setContact(formatContact(rest));
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setError(null);
+    if (contact.replace(/\D/g, "").length !== 11) {
+      setError("연락처를 정확히 입력해주세요.");
+      return;
+    }
     try {
       await createInquiry({ name, contact, message });
       setSubmitted(true);
       setName("");
-      setContact("");
+      setContact(CONTACT_PREFIX);
       setMessage("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "문의 등록에 실패했습니다.");
@@ -33,9 +59,11 @@ export function Contact() {
         <form onSubmit={handleSubmit}>
           <input placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} required />
           <input
-            placeholder="연락처 (전화번호 또는 이메일)"
+            ref={contactInputRef}
+            placeholder="연락처 (전화번호)"
+            inputMode="numeric"
             value={contact}
-            onChange={(e) => setContact(e.target.value)}
+            onChange={handleContactChange}
             required
           />
           <textarea
