@@ -10,6 +10,7 @@ export function NoticesAdmin() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isPinned, setIsPinned] = useState(false);
 
   function loadNotices() {
     getNotices(1).then((res) => setNotices(res.notices));
@@ -22,6 +23,7 @@ export function NoticesAdmin() {
     setTitle("");
     setBody("");
     setImageFile(null);
+    setIsPinned(false);
   }
 
   function startEdit(notice: Notice) {
@@ -29,6 +31,7 @@ export function NoticesAdmin() {
     setTitle(notice.title);
     setBody(notice.body);
     setImageFile(null);
+    setIsPinned(notice.isPinned);
   }
 
   async function handleSubmit(event: FormEvent) {
@@ -36,6 +39,7 @@ export function NoticesAdmin() {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("body", body);
+    formData.append("isPinned", String(isPinned));
     if (imageFile) formData.append("image", imageFile);
 
     if (editingId) {
@@ -62,6 +66,10 @@ export function NoticesAdmin() {
         <input placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)} required />
         <textarea placeholder="내용" rows={6} value={body} onChange={(e) => setBody(e.target.value)} required />
         <ImageUploader onChange={setImageFile} />
+        <label>
+          <input type="checkbox" checked={isPinned} onChange={(e) => setIsPinned(e.target.checked)} /> 상단 고정
+          (확성기 표시)
+        </label>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button type="submit">{editingId ? "수정 저장" : "등록"}</button>
           {editingId && (
@@ -87,6 +95,11 @@ export function NoticesAdmin() {
               <td>
                 {notice.imageUrl && (
                   <img src={resolveImageUrl(notice.imageUrl)} alt="" width={40} style={{ marginRight: 8 }} />
+                )}
+                {notice.isPinned && (
+                  <span className="notice-pin-icon" title="상단 고정">
+                    📢
+                  </span>
                 )}
                 {notice.title}
               </td>

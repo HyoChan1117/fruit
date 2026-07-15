@@ -31,6 +31,7 @@ export interface Notice {
   title: string;
   body: string;
   imageUrl: string | null;
+  isPinned: boolean;
   createdAt: string;
   updatedAt: string;
 }

@@ -156,7 +156,14 @@ export function Home() {
         <h2 className="section__title">최근 공지사항</h2>
         {recentNotices.map((notice) => (
           <div key={notice.id} className="list-item">
-            <Link to={`/notices/${notice.id}`}>{notice.title}</Link>
+            <Link to={`/notices/${notice.id}`}>
+              {notice.isPinned && (
+                <span className="notice-pin-icon" title="상단 고정">
+                  📢
+                </span>
+              )}
+              {notice.title}
+            </Link>
             <span>{new Date(notice.createdAt).toLocaleDateString()}</span>
           </div>
         ))}

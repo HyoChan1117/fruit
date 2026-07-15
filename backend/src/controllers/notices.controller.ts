@@ -23,7 +23,7 @@ export async function listNotices(req: Request, res: Response) {
   const [notices, total] = await Promise.all([
     prisma.notice.findMany({
       where,
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
     }),
@@ -43,10 +43,11 @@ export async function getNotice(req: Request, res: Response) {
 
 export async function createNotice(req: Request, res: Response) {
   const { title, body } = req.body;
+  const isPinned = req.body.isPinned === "true";
   const imageUrl = req.file ? buildImageUrl("notices", req.file.filename) : null;
 
   const notice = await prisma.notice.create({
-    data: { title, body, imageUrl },
+    data: { title, body, imageUrl, isPinned },
   });
 
   res.status(201).json(notice);
@@ -55,6 +56,7 @@ export async function createNotice(req: Request, res: Response) {
 export async function updateNotice(req: Request, res: Response) {
   const id = Number(req.params.id);
   const { title, body } = req.body;
+  const isPinned = req.body.isPinned === "true";
 
   const existing = await prisma.notice.findUnique({ where: { id } });
   if (!existing) {
@@ -69,7 +71,7 @@ export async function updateNotice(req: Request, res: Response) {
 
   const updated = await prisma.notice.update({
     where: { id },
-    data: { title, body, imageUrl },
+    data: { title, body, imageUrl, isPinned },
   });
 
   res.json(updated);

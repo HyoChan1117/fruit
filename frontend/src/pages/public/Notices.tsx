@@ -62,7 +62,14 @@ export function Notices() {
 
         {data.notices.map((notice) => (
           <div key={notice.id} className="list-item">
-            <Link to={`/notices/${notice.id}`}>{notice.title}</Link>
+            <Link to={`/notices/${notice.id}`}>
+              {notice.isPinned && (
+                <span className="notice-pin-icon" title="상단 고정">
+                  📢
+                </span>
+              )}
+              {notice.title}
+            </Link>
             <span>{new Date(notice.createdAt).toLocaleDateString()}</span>
           </div>
         ))}

@@ -838,6 +838,10 @@ a {
   border-bottom: 1px solid #eee;
 }
 
+.notice-pin-icon {
+  margin-right: 0.4rem;
+}
+
 form {
   display: flex;
   flex-direction: column;
