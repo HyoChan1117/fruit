@@ -20,7 +20,7 @@ export function NoticeDetail() {
       <PageBanner title={notice.title} subtitle={new Date(notice.createdAt).toLocaleDateString()} />
       <div className="page-content">
         {notice.imageUrl && (
-          <img src={resolveImageUrl(notice.imageUrl)} alt={notice.title} style={{ maxWidth: "100%" }} />
+          <img src={resolveImageUrl(notice.imageUrl)} alt={notice.title} className="notice-detail__image" />
         )}
         <p style={{ whiteSpace: "pre-wrap" }}>{notice.body}</p>
         <div className="detail-back">
