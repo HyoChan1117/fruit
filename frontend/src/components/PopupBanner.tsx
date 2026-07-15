@@ -15,6 +15,7 @@ interface PopupBannerProps {
 
 export function PopupBanner({ imageUrl, linkUrl }: PopupBannerProps) {
   const [visible, setVisible] = useState(false);
+  const [dontShowToday, setDontShowToday] = useState(false);
 
   useEffect(() => {
     if (!imageUrl) return;
@@ -25,11 +26,9 @@ export function PopupBanner({ imageUrl, linkUrl }: PopupBannerProps) {
   if (!visible || !imageUrl) return null;
 
   function close() {
-    setVisible(false);
-  }
-
-  function dismissForToday() {
-    localStorage.setItem(DISMISS_STORAGE_KEY, getTodayString());
+    if (dontShowToday) {
+      localStorage.setItem(DISMISS_STORAGE_KEY, getTodayString());
+    }
     setVisible(false);
   }
 
@@ -55,9 +54,14 @@ export function PopupBanner({ imageUrl, linkUrl }: PopupBannerProps) {
         ) : (
           image
         )}
-        <button type="button" className="popup-banner__dismiss" onClick={dismissForToday}>
+        <label className="popup-banner__dismiss">
+          <input
+            type="checkbox"
+            checked={dontShowToday}
+            onChange={(e) => setDontShowToday(e.target.checked)}
+          />
           오늘 하루 보지 않기
-        </button>
+        </label>
       </div>
     </div>
   );

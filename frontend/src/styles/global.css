@@ -738,7 +738,10 @@ a {
 .popup-banner__dismiss {
   width: 100%;
   padding: 0.75rem;
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   border-top: 1px solid #eee;
   background: #fff;
   color: var(--navy-800);
