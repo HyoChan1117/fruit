@@ -5,6 +5,7 @@ import { getNotices } from "../../api/notices";
 import { getRecentAuctionResults } from "../../api/auctionResults";
 import { AuctionResult, CompanyInfo, Notice } from "../../api/types";
 import { AuctionTicker } from "../../components/AuctionTicker";
+import { PopupBanner } from "../../components/PopupBanner";
 
 const AUCTION_RESULTS_POOL_SIZE = 15;
 
@@ -71,6 +72,10 @@ export function Home() {
 
   return (
     <div>
+      {curtainPhase === "done" && companyInfo?.popupBannerEnabled && (
+        <PopupBanner imageUrl={companyInfo.popupBannerImageUrl} linkUrl={companyInfo.popupBannerLinkUrl} />
+      )}
+
       {curtainPhase !== "done" && (
         <div className={`curtain ${curtainPhase === "opening" ? "curtain--opening" : ""}`}>
           <div className="curtain__panel curtain__panel--1" />

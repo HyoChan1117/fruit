@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ImageUploaderProps {
   label?: string;
@@ -8,6 +8,10 @@ interface ImageUploaderProps {
 
 export function ImageUploader({ label = "이미지", currentImageUrl, onChange }: ImageUploaderProps) {
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(currentImageUrl);
+
+  useEffect(() => {
+    setPreviewUrl(currentImageUrl);
+  }, [currentImageUrl]);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;

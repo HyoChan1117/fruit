@@ -20,6 +20,9 @@ export interface CompanyInfo {
   valueCard3Body: string;
   aboutText: string | null;
   aboutImageUrl: string | null;
+  popupBannerEnabled: boolean;
+  popupBannerImageUrl: string | null;
+  popupBannerLinkUrl: string | null;
   updatedAt: string;
 }
 

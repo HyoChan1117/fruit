@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { getCompanyInfo, updateCompanyInfo, updateAboutImage } from "../../api/companyInfo";
+import { getCompanyInfo, updateCompanyInfo, updateAboutImage, updatePopupBannerImage } from "../../api/companyInfo";
 import { resolveImageUrl } from "../../api/client";
 import { CompanyInfo } from "../../api/types";
 import { ImageUploader } from "../../components/ImageUploader";
@@ -19,6 +19,10 @@ export function CompanyInfoEditor() {
   const [aboutText, setAboutText] = useState("");
   const [aboutImageUrl, setAboutImageUrl] = useState<string | null>(null);
   const [aboutImageFile, setAboutImageFile] = useState<File | null>(null);
+  const [popupBannerEnabled, setPopupBannerEnabled] = useState(false);
+  const [popupBannerLinkUrl, setPopupBannerLinkUrl] = useState("");
+  const [popupBannerImageUrl, setPopupBannerImageUrl] = useState<string | null>(null);
+  const [popupBannerImageFile, setPopupBannerImageFile] = useState<File | null>(null);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
@@ -36,6 +40,9 @@ export function CompanyInfoEditor() {
       setAuctionTime(info.auctionTime ?? "");
       setAboutText(info.aboutText ?? "");
       setAboutImageUrl(info.aboutImageUrl);
+      setPopupBannerEnabled(info.popupBannerEnabled);
+      setPopupBannerLinkUrl(info.popupBannerLinkUrl ?? "");
+      setPopupBannerImageUrl(info.popupBannerImageUrl);
     });
   }, []);
 
@@ -55,6 +62,8 @@ export function CompanyInfoEditor() {
       holidays: holidays || null,
       auctionTime: auctionTime || null,
       aboutText: aboutText || null,
+      popupBannerEnabled,
+      popupBannerLinkUrl: popupBannerLinkUrl || null,
     });
 
     if (aboutImageFile) {
@@ -63,6 +72,14 @@ export function CompanyInfoEditor() {
       const updated = await updateAboutImage(formData);
       setAboutImageUrl(updated.aboutImageUrl);
       setAboutImageFile(null);
+    }
+
+    if (popupBannerImageFile) {
+      const formData = new FormData();
+      formData.append("popupBannerImage", popupBannerImageFile);
+      const updated = await updatePopupBannerImage(formData);
+      setPopupBannerImageUrl(updated.popupBannerImageUrl);
+      setPopupBannerImageFile(null);
     }
 
     setSaved(true);
@@ -83,6 +100,23 @@ export function CompanyInfoEditor() {
 
         <label>타이핑 문구 (영문 짧은 슬로건)</label>
         <input value={heroTypewriterText} onChange={(e) => setHeroTypewriterText(e.target.value)} />
+
+        <h2>홈 화면 팝업 배너</h2>
+        <label>
+          <input
+            type="checkbox"
+            checked={popupBannerEnabled}
+            onChange={(e) => setPopupBannerEnabled(e.target.checked)}
+          />{" "}
+          홈 화면 진입 시 팝업 배너 표시
+        </label>
+        <ImageUploader
+          label="배너 이미지"
+          currentImageUrl={resolveImageUrl(popupBannerImageUrl)}
+          onChange={setPopupBannerImageFile}
+        />
+        <label>클릭 시 이동 링크 (선택, 예: /notices/3)</label>
+        <input value={popupBannerLinkUrl} onChange={(e) => setPopupBannerLinkUrl(e.target.value)} />
 
         <h2>청과 소개 페이지 문구</h2>
         <label>소개 이미지 + 글</label>

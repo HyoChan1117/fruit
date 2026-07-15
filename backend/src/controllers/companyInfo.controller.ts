@@ -28,6 +28,8 @@ export async function updateCompanyInfo(req: Request, res: Response) {
     valueCard3Title,
     valueCard3Body,
     aboutText,
+    popupBannerEnabled,
+    popupBannerLinkUrl,
   } = req.body;
 
   const updated = await prisma.companyInfo.update({
@@ -52,6 +54,8 @@ export async function updateCompanyInfo(req: Request, res: Response) {
       valueCard3Title,
       valueCard3Body,
       aboutText,
+      popupBannerEnabled,
+      popupBannerLinkUrl,
     },
   });
 
@@ -70,6 +74,23 @@ export async function updateAboutImage(req: Request, res: Response) {
   const updated = await prisma.companyInfo.update({
     where: { id: 1 },
     data: { aboutImageUrl },
+  });
+
+  res.json(updated);
+}
+
+export async function updatePopupBannerImage(req: Request, res: Response) {
+  const existing = await prisma.companyInfo.findUnique({ where: { id: 1 } });
+
+  let popupBannerImageUrl = existing?.popupBannerImageUrl ?? null;
+  if (req.file) {
+    deleteImageIfExists(existing?.popupBannerImageUrl);
+    popupBannerImageUrl = buildImageUrl("company", req.file.filename);
+  }
+
+  const updated = await prisma.companyInfo.update({
+    where: { id: 1 },
+    data: { popupBannerImageUrl },
   });
 
   res.json(updated);

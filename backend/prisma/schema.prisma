@@ -38,6 +38,9 @@ model CompanyInfo {
   valueCard3Body     String   @default("구천청과 소개 문구를 관리자 페이지에서 입력해주세요.")
   aboutText          String?
   aboutImageUrl      String?
+  popupBannerEnabled Boolean  @default(false)
+  popupBannerImageUrl String?
+  popupBannerLinkUrl String?
   updatedAt          DateTime @updatedAt
 }
 
