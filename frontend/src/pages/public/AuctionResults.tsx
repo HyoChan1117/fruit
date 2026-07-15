@@ -88,7 +88,7 @@ export function AuctionResults() {
         <p style={{ textAlign: "right", fontSize: "0.85rem", color: "#8a6a67", marginBottom: "0.5rem" }}>
           (단위: 무게 - kg, 단가 - 원)
         </p>
-        <table>
+        <table className="auction-results-table">
           <thead>
             <tr>
               <th>경매일자</th>

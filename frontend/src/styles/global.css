@@ -392,10 +392,17 @@ a {
 .ticker__header,
 .ticker__row {
   display: grid;
-  grid-template-columns: 110px 90px 1fr 90px 60px 80px 70px 100px;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 0.5rem;
   align-items: center;
   padding: 0 0.5rem;
+}
+
+.ticker__header > span,
+.ticker__row > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ticker__header {
@@ -1024,6 +1031,17 @@ table td {
   -webkit-overflow-scrolling: touch;
 }
 
+.auction-results-table {
+  table-layout: fixed;
+}
+
+.auction-results-table th,
+.auction-results-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .error-text {
   color: #c62828;
 }
@@ -1087,7 +1105,7 @@ table td {
 
   .ticker__header,
   .ticker__row {
-    grid-template-columns: 34px 40px minmax(0, 1fr) minmax(0, 1fr) 20px 30px 26px 44px;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: 0.2rem;
     padding: 0 0.3rem;
   }
@@ -1103,12 +1121,6 @@ table td {
   .ticker__row {
     height: 40px;
     font-size: 0.64rem;
-  }
-
-  .ticker__row > span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .ticker__date--full {
