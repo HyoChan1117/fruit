@@ -3,6 +3,7 @@ import {
   getCompanyInfo,
   updateCompanyInfo,
   updateAboutImage,
+  updatePageBannerImage,
   updatePopupBannerImage,
 } from "../controllers/companyInfo.controller";
 import { requireAdmin } from "../middleware/auth";
@@ -16,6 +17,7 @@ publicRouter.get("/", getCompanyInfo);
 const adminRouter = Router();
 adminRouter.put("/", requireAdmin, updateCompanyInfo);
 adminRouter.put("/about-image", requireAdmin, upload.single("aboutImage"), updateAboutImage);
+adminRouter.put("/page-banner-image", requireAdmin, upload.single("pageBannerImage"), updatePageBannerImage);
 adminRouter.put("/popup-banner-image", requireAdmin, upload.single("popupBannerImage"), updatePopupBannerImage);
 
 export { publicRouter as companyInfoPublicRouter, adminRouter as companyInfoAdminRouter };

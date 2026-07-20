@@ -30,14 +30,24 @@ model CompanyInfo {
   businessHours      String?
   holidays           String?
   auctionTime        String?
-  valueCard1Title    String   @default("정직한 선별")
-  valueCard1Body     String   @default("엄격한 기준으로 농산물을 선별하여 품질을 보장합니다.")
-  valueCard2Title    String   @default("신선한 유통")
-  valueCard2Body     String   @default("산지에서 소비자까지 신선함을 유지하며 빠르게 전달합니다.")
-  valueCard3Title    String   @default("믿을 수 있는 파트너")
-  valueCard3Body     String   @default("구천청과 소개 문구를 관리자 페이지에서 입력해주세요.")
+  serviceIntroTitle  String   @default("어떤 서비스를 제공할까?")
+  serviceIntroIcon   String   @default("🍎")
+  valueCard1Title    String   @default("산지 직송")
+  valueCard1Body     String   @default("전국 산지에서 엄선한 신선 청과를 매일 직송으로 받아 최상의 상태를 유지합니다.")
+  valueCard1Icon     String   @default("🚚")
+  valueCard2Title    String   @default("투명한 경매")
+  valueCard2Body     String   @default("신속하고 투명한 경매 진행으로 합리적인 가격을 보장합니다.")
+  valueCard2Icon     String   @default("📊")
+  valueCard3Title    String   @default("철저한 품질 검수")
+  valueCard3Body     String   @default("입고 단계부터 꼼꼼하게 검수하여 믿을 수 있는 품질만 선별합니다.")
+  valueCard3Icon     String   @default("🔍")
+  valueCard4Title    String   @default("신속한 사후 관리")
+  valueCard4Body     String   @default("주문 후 문의와 요청에 빠르게 응대하여 끝까지 책임지고 관리합니다.")
+  valueCard4Icon     String   @default("💬")
+  serviceCtaTitle    String   @default("구천청과가 궁금하다면")
   aboutText          String?
   aboutImageUrl      String?
+  pageBannerImageUrl String?
   popupBannerEnabled Boolean  @default(false)
   popupBannerImageUrl String?
   popupBannerLinkUrl String?

@@ -15,7 +15,7 @@ export function Location() {
 
   return (
     <>
-      <PageBanner eyebrow="LOCATION" title="찾아오시는 길" subtitle={companyInfo.address} />
+      <PageBanner title="찾아오시는 길" />
       <div className="page-content">
         <div className="location-layout">
           <div className="location-layout__map">
@@ -29,7 +29,7 @@ export function Location() {
           <dl className="location-info">
             <div className="location-info__row">
               <dt>
-                <span aria-hidden="true">🏪</span> 명칭
+                <span aria-hidden="true">🏪</span> 이름
               </dt>
               <dd>구천청과</dd>
             </div>

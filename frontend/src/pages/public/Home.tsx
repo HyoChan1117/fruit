@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { getCompanyInfo } from "../../api/companyInfo";
 import { getNotices } from "../../api/notices";
 import { getRecentAuctionResults } from "../../api/auctionResults";
-import { AuctionResult, CompanyInfo, Notice } from "../../api/types";
+import { getProducts } from "../../api/products";
+import { resolveImageUrl } from "../../api/client";
+import { AuctionResult, CompanyInfo, Notice, Product } from "../../api/types";
 import { AuctionTicker } from "../../components/AuctionTicker";
 import { PopupBanner } from "../../components/PopupBanner";
 
@@ -21,9 +23,20 @@ const FALLBACK_SUBCOPY =
   "구천청과는 엄격한 기준으로 선별한 농산물을 산지에서 식탁까지 정직하게 전달하는 선과장입니다.";
 const FALLBACK_TYPEWRITER_TEXT = "FRESH · SELECTED · DELIVERED";
 
+const FALLBACK_SERVICE_INTRO_TITLE = "어떤 서비스를 제공할까?";
+const FALLBACK_SERVICE_INTRO_ICON = "🍎";
+const FALLBACK_SERVICE_CTA_TITLE = "구천청과가 궁금하다면";
+const FALLBACK_VALUE_CARDS = [
+  { title: "산지 직송", body: "전국 산지에서 엄선한 신선 청과를 매일 직송으로 받아 최상의 상태를 유지합니다.", icon: "🚚" },
+  { title: "투명한 경매", body: "신속하고 투명한 경매 진행으로 합리적인 가격을 보장합니다.", icon: "📊" },
+  { title: "철저한 품질 검수", body: "입고 단계부터 꼼꼼하게 검수하여 믿을 수 있는 품질만 선별합니다.", icon: "🔍" },
+  { title: "신속한 사후 관리", body: "주문 후 문의와 요청에 빠르게 응대하여 끝까지 책임지고 관리합니다.", icon: "💬" },
+];
+
 export function Home() {
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [recentNotices, setRecentNotices] = useState<Notice[]>([]);
+  const [recentProducts, setRecentProducts] = useState<Product[]>([]);
   const [recentAuctionResults, setRecentAuctionResults] = useState<AuctionResult[]>([]);
   const [curtainPhase, setCurtainPhase] = useState<"closed" | "opening" | "done">("closed");
   const [typedText, setTypedText] = useState("");
@@ -35,6 +48,7 @@ export function Home() {
       setHeroReady(true);
     });
     getNotices(1).then((res) => setRecentNotices(res.notices.slice(0, 5)));
+    getProducts().then((products) => setRecentProducts(products.slice(0, 5)));
     getRecentAuctionResults(AUCTION_RESULTS_POOL_SIZE).then(setRecentAuctionResults);
   }, []);
 
@@ -141,6 +155,84 @@ export function Home() {
         <Link to="/gallery">갤러리</Link>
         <Link to="/location">찾아오시는 길</Link>
       </nav>
+
+      <section className="section">
+        <div className="service-bento">
+          <div className="service-bento__card service-bento__card--intro">
+            <span className="service-bento__icon" aria-hidden="true">
+              {companyInfo?.serviceIntroIcon ?? FALLBACK_SERVICE_INTRO_ICON}
+            </span>
+            <h3>{companyInfo?.serviceIntroTitle ?? FALLBACK_SERVICE_INTRO_TITLE}</h3>
+          </div>
+
+          <div className="service-bento__card">
+            <div className="service-bento__top">
+              <h3>{companyInfo?.valueCard1Title ?? FALLBACK_VALUE_CARDS[0].title}</h3>
+              <span className="service-bento__icon" aria-hidden="true">
+                {companyInfo?.valueCard1Icon ?? FALLBACK_VALUE_CARDS[0].icon}
+              </span>
+            </div>
+            <p>{companyInfo?.valueCard1Body ?? FALLBACK_VALUE_CARDS[0].body}</p>
+          </div>
+
+          <div className="service-bento__card">
+            <div className="service-bento__top">
+              <h3>{companyInfo?.valueCard2Title ?? FALLBACK_VALUE_CARDS[1].title}</h3>
+              <span className="service-bento__icon" aria-hidden="true">
+                {companyInfo?.valueCard2Icon ?? FALLBACK_VALUE_CARDS[1].icon}
+              </span>
+            </div>
+            <p>{companyInfo?.valueCard2Body ?? FALLBACK_VALUE_CARDS[1].body}</p>
+          </div>
+
+          <div className="service-bento__card">
+            <div className="service-bento__top">
+              <h3>{companyInfo?.valueCard3Title ?? FALLBACK_VALUE_CARDS[2].title}</h3>
+              <span className="service-bento__icon" aria-hidden="true">
+                {companyInfo?.valueCard3Icon ?? FALLBACK_VALUE_CARDS[2].icon}
+              </span>
+            </div>
+            <p>{companyInfo?.valueCard3Body ?? FALLBACK_VALUE_CARDS[2].body}</p>
+          </div>
+
+          <div className="service-bento__card">
+            <div className="service-bento__top">
+              <h3>{companyInfo?.valueCard4Title ?? FALLBACK_VALUE_CARDS[3].title}</h3>
+              <span className="service-bento__icon" aria-hidden="true">
+                {companyInfo?.valueCard4Icon ?? FALLBACK_VALUE_CARDS[3].icon}
+              </span>
+            </div>
+            <p>{companyInfo?.valueCard4Body ?? FALLBACK_VALUE_CARDS[3].body}</p>
+          </div>
+
+          <div className="service-bento__card service-bento__card--cta">
+            <h3>{companyInfo?.serviceCtaTitle ?? FALLBACK_SERVICE_CTA_TITLE}</h3>
+            <Link to="/about" className="service-bento__link">
+              청과 소개 보기 →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section__header">
+          <h2 className="section__title">취급 품목</h2>
+          <Link to="/products" className="section__more">
+            자세히 보기 →
+          </Link>
+        </div>
+        <div className="product-row">
+          {recentProducts.map((product) => (
+            <Link key={product.id} to={`/products/${product.id}`} className="product-row__item">
+              {product.imageUrl && <img src={resolveImageUrl(product.imageUrl)} alt={product.name} />}
+              <strong>
+                {product.name} ({product.variety})
+              </strong>
+            </Link>
+          ))}
+          {recentProducts.length === 0 && <p>등록된 품목이 없습니다.</p>}
+        </div>
+      </section>
 
       <section className="section">
         <div className="section__header">

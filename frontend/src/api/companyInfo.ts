@@ -13,6 +13,10 @@ export function updateAboutImage(formData: FormData) {
   return apiClient.put<CompanyInfo>("/api/admin/company-info/about-image", formData);
 }
 
+export function updatePageBannerImage(formData: FormData) {
+  return apiClient.put<CompanyInfo>("/api/admin/company-info/page-banner-image", formData);
+}
+
 export function updatePopupBannerImage(formData: FormData) {
   return apiClient.put<CompanyInfo>("/api/admin/company-info/popup-banner-image", formData);
 }

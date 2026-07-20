@@ -17,13 +17,21 @@ export function ProductDetail() {
 
   return (
     <>
-      <PageBanner eyebrow="PRODUCTS" title={product.name} subtitle={`품종: ${product.variety}`} />
+      <PageBanner title="취급 품목" />
       <div className="page-content">
-        <Link to="/products">← 목록으로</Link>
+        <div className="detail-header">
+          <h2 className="detail-header__title">{product.name}</h2>
+          <span className="detail-header__date">품종: {product.variety}</span>
+        </div>
         {product.imageUrl && (
           <img src={resolveImageUrl(product.imageUrl)} alt={product.name} style={{ maxWidth: "100%" }} />
         )}
         <p style={{ whiteSpace: "pre-wrap" }}>{product.description}</p>
+        <div className="detail-back">
+          <Link to="/products" className="btn-back">
+            ← 목록으로
+          </Link>
+        </div>
       </div>
     </>
   );

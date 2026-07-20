@@ -35,7 +35,7 @@ export function Notices() {
 
   return (
     <>
-      <PageBanner eyebrow="NOTICE" title="공지사항" />
+      <PageBanner title="공지사항" />
       <div className="page-content">
         <div className="list-filters">
           <div className="list-filters__search">
