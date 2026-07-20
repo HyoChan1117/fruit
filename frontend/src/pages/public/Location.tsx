@@ -28,46 +28,34 @@ export function Location() {
 
           <dl className="location-info">
             <div className="location-info__row">
-              <dt>
-                <span aria-hidden="true">🏪</span> 이름
-              </dt>
+              <dt>이름</dt>
               <dd>구천청과</dd>
             </div>
             <div className="location-info__row">
-              <dt>
-                <span aria-hidden="true">📍</span> 주소
-              </dt>
+              <dt>주소</dt>
               <dd>{companyInfo.address}</dd>
             </div>
             {companyInfo.businessHours && (
               <div className="location-info__row">
-                <dt>
-                  <span aria-hidden="true">🕒</span> 영업시간
-                </dt>
+                <dt>영업시간</dt>
                 <dd>{companyInfo.businessHours}</dd>
               </div>
             )}
             {companyInfo.holidays && (
               <div className="location-info__row">
-                <dt>
-                  <span aria-hidden="true">📅</span> 휴무
-                </dt>
+                <dt>휴무</dt>
                 <dd>{companyInfo.holidays}</dd>
               </div>
             )}
             {companyInfo.nearbyInfo && (
               <div className="location-info__row">
-                <dt>
-                  <span aria-hidden="true">🗺️</span> 인근
-                </dt>
+                <dt>인근</dt>
                 <dd>{companyInfo.nearbyInfo}</dd>
               </div>
             )}
             {companyInfo.parkingInfo && (
               <div className="location-info__row">
-                <dt>
-                  <span aria-hidden="true">🚗</span> 주차
-                </dt>
+                <dt>주차</dt>
                 <dd>{companyInfo.parkingInfo}</dd>
               </div>
             )}

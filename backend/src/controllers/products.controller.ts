@@ -4,9 +4,13 @@ import { buildImageUrl, deleteImageIfExists } from "../middleware/upload";
 
 export async function listProducts(req: Request, res: Response) {
   const name = typeof req.query.name === "string" ? req.query.name : undefined;
+  const featured = req.query.featured === "true";
 
   const products = await prisma.product.findMany({
-    where: name ? { name } : undefined,
+    where: {
+      ...(name ? { name } : {}),
+      ...(featured ? { isFeatured: true } : {}),
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -23,10 +27,11 @@ export async function getProduct(req: Request, res: Response) {
 
 export async function createProduct(req: Request, res: Response) {
   const { name, variety, description } = req.body;
+  const isFeatured = req.body.isFeatured === "true" || req.body.isFeatured === true;
   const imageUrl = req.file ? buildImageUrl("products", req.file.filename) : null;
 
   const product = await prisma.product.create({
-    data: { name, variety, description, imageUrl },
+    data: { name, variety, description, imageUrl, isFeatured },
   });
 
   res.status(201).json(product);
@@ -35,6 +40,7 @@ export async function createProduct(req: Request, res: Response) {
 export async function updateProduct(req: Request, res: Response) {
   const id = Number(req.params.id);
   const { name, variety, description } = req.body;
+  const isFeatured = req.body.isFeatured === "true" || req.body.isFeatured === true;
 
   const existing = await prisma.product.findUnique({ where: { id } });
   if (!existing) {
@@ -49,7 +55,7 @@ export async function updateProduct(req: Request, res: Response) {
 
   const updated = await prisma.product.update({
     where: { id },
-    data: { name, variety, description, imageUrl },
+    data: { name, variety, description, imageUrl, isFeatured },
   });
 
   res.json(updated);

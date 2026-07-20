@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getCompanyInfo } from "../../api/companyInfo";
 import { getNotices } from "../../api/notices";
 import { getRecentAuctionResults } from "../../api/auctionResults";
-import { getProducts } from "../../api/products";
+import { getProducts, getFeaturedProducts } from "../../api/products";
 import { resolveImageUrl } from "../../api/client";
 import { AuctionResult, CompanyInfo, Notice, Product } from "../../api/types";
 import { AuctionTicker } from "../../components/AuctionTicker";
@@ -36,7 +36,7 @@ const FALLBACK_VALUE_CARDS = [
 export function Home() {
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [recentNotices, setRecentNotices] = useState<Notice[]>([]);
-  const [recentProducts, setRecentProducts] = useState<Product[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [recentAuctionResults, setRecentAuctionResults] = useState<AuctionResult[]>([]);
   const [curtainPhase, setCurtainPhase] = useState<"closed" | "opening" | "done">("closed");
   const [typedText, setTypedText] = useState("");
@@ -48,7 +48,13 @@ export function Home() {
       setHeroReady(true);
     });
     getNotices(1).then((res) => setRecentNotices(res.notices.slice(0, 5)));
-    getProducts().then((products) => setRecentProducts(products.slice(0, 5)));
+    getFeaturedProducts().then((featured) => {
+      if (featured.length > 0) {
+        setFeaturedProducts(featured.slice(0, 5));
+      } else {
+        getProducts().then((products) => setFeaturedProducts(products.slice(0, 5)));
+      }
+    });
     getRecentAuctionResults(AUCTION_RESULTS_POOL_SIZE).then(setRecentAuctionResults);
   }, []);
 
@@ -222,7 +228,7 @@ export function Home() {
           </Link>
         </div>
         <div className="product-row">
-          {recentProducts.map((product) => (
+          {featuredProducts.map((product) => (
             <Link key={product.id} to={`/products/${product.id}`} className="product-row__item">
               {product.imageUrl && <img src={resolveImageUrl(product.imageUrl)} alt={product.name} />}
               <strong>
@@ -230,7 +236,7 @@ export function Home() {
               </strong>
             </Link>
           ))}
-          {recentProducts.length === 0 && <p>등록된 품목이 없습니다.</p>}
+          {featuredProducts.length === 0 && <p>등록된 품목이 없습니다.</p>}
         </div>
       </section>
 

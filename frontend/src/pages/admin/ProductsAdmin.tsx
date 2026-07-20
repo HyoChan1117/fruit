@@ -4,12 +4,15 @@ import { resolveImageUrl } from "../../api/client";
 import { Product } from "../../api/types";
 import { ImageUploader } from "../../components/ImageUploader";
 
+const MAX_FEATURED = 5;
+
 export function ProductsAdmin() {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [variety, setVariety] = useState("");
   const [description, setDescription] = useState("");
+  const [isFeatured, setIsFeatured] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   function loadProducts() {
@@ -23,6 +26,7 @@ export function ProductsAdmin() {
     setName("");
     setVariety("");
     setDescription("");
+    setIsFeatured(false);
     setImageFile(null);
   }
 
@@ -31,15 +35,24 @@ export function ProductsAdmin() {
     setName(product.name);
     setVariety(product.variety);
     setDescription(product.description);
+    setIsFeatured(product.isFeatured);
     setImageFile(null);
   }
 
+  const totalFeaturedCount = products.filter((p) => p.isFeatured).length;
+  const featuredCount = products.filter((p) => p.isFeatured && p.id !== editingId).length;
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+    if (isFeatured && featuredCount >= MAX_FEATURED) {
+      alert(`홈 화면 노출은 최대 ${MAX_FEATURED}개까지 선택할 수 있습니다.`);
+      return;
+    }
     const formData = new FormData();
     formData.append("name", name);
     formData.append("variety", variety);
     formData.append("description", description);
+    formData.append("isFeatured", String(isFeatured));
     if (imageFile) formData.append("image", imageFile);
 
     if (editingId) {
@@ -54,6 +67,21 @@ export function ProductsAdmin() {
   async function handleDelete(id: number) {
     if (!confirm("삭제하시겠습니까?")) return;
     await deleteProduct(id);
+    loadProducts();
+  }
+
+  async function handleToggleFeatured(product: Product) {
+    const willFeature = !product.isFeatured;
+    if (willFeature) {
+      const currentlyFeatured = products.filter((p) => p.isFeatured).length;
+      if (currentlyFeatured >= MAX_FEATURED) {
+        alert(`홈 화면 노출은 최대 ${MAX_FEATURED}개까지 선택할 수 있습니다.`);
+        return;
+      }
+    }
+    const formData = new FormData();
+    formData.append("isFeatured", String(willFeature));
+    await updateProduct(product.id, formData);
     loadProducts();
   }
 
@@ -73,6 +101,15 @@ export function ProductsAdmin() {
           required
         />
         <ImageUploader onChange={setImageFile} />
+        <label>
+          <input
+            type="checkbox"
+            checked={isFeatured}
+            disabled={!isFeatured && featuredCount >= MAX_FEATURED}
+            onChange={(e) => setIsFeatured(e.target.checked)}
+          />{" "}
+          홈 화면 &quot;취급 품목&quot;에 노출 ({featuredCount}/{MAX_FEATURED})
+        </label>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button type="submit">{editingId ? "수정 저장" : "등록"}</button>
           {editingId && (
@@ -89,6 +126,7 @@ export function ProductsAdmin() {
           <tr>
             <th>품목명</th>
             <th>품종명</th>
+            <th>홈 노출</th>
             <th></th>
           </tr>
         </thead>
@@ -102,6 +140,14 @@ export function ProductsAdmin() {
                 {product.name}
               </td>
               <td>{product.variety}</td>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={product.isFeatured}
+                  disabled={!product.isFeatured && totalFeaturedCount >= MAX_FEATURED}
+                  onChange={() => handleToggleFeatured(product)}
+                />
+              </td>
               <td style={{ display: "flex", gap: "0.5rem" }}>
                 <button className="secondary" onClick={() => startEdit(product)}>
                   수정

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCompanyInfo } from "../api/companyInfo";
+import { getCompanyInfo, getCachedCompanyInfo } from "../api/companyInfo";
 import { resolveImageUrl } from "../api/client";
 import defaultBannerImage from "../assets/hero-bg.png";
 
@@ -8,16 +8,18 @@ interface PageBannerProps {
   subtitle?: string;
 }
 
+function resolveBannerImage(pageBannerImageUrl: string | null | undefined) {
+  return pageBannerImageUrl ? resolveImageUrl(pageBannerImageUrl) ?? defaultBannerImage : defaultBannerImage;
+}
+
 export function PageBanner({ title, subtitle }: PageBannerProps) {
-  const [bannerImageUrl, setBannerImageUrl] = useState(defaultBannerImage);
+  const [bannerImageUrl, setBannerImageUrl] = useState(() =>
+    resolveBannerImage(getCachedCompanyInfo()?.pageBannerImageUrl)
+  );
 
   useEffect(() => {
     getCompanyInfo()
-      .then((info) => {
-        if (info.pageBannerImageUrl) {
-          setBannerImageUrl(resolveImageUrl(info.pageBannerImageUrl) ?? defaultBannerImage);
-        }
-      })
+      .then((info) => setBannerImageUrl(resolveBannerImage(info.pageBannerImageUrl)))
       .catch(() => {});
   }, []);
 

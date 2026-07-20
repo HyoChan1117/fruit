@@ -6,6 +6,10 @@ export function getProducts(name?: string) {
   return apiClient.get<Product[]>(`/api/products${query}`);
 }
 
+export function getFeaturedProducts() {
+  return apiClient.get<Product[]>("/api/products?featured=true");
+}
+
 export function getProduct(id: number) {
   return apiClient.get<Product>(`/api/products/${id}`);
 }

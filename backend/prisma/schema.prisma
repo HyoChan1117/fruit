@@ -70,6 +70,7 @@ model Product {
   variety     String
   description String
   imageUrl    String?
+  isFeatured  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

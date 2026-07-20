@@ -217,7 +217,7 @@ a {
 }
 
 .page-banner {
-  padding: 8.5rem 2rem;
+  padding: 6rem 2rem;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -851,7 +851,7 @@ a {
 
 .product-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1.25rem;
 }
 

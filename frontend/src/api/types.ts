@@ -59,6 +59,7 @@ export interface Product {
   variety: string;
   description: string;
   imageUrl: string | null;
+  isFeatured: boolean;
   createdAt: string;
   updatedAt: string;
 }
