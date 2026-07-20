@@ -12,6 +12,7 @@ import { ImageUploader } from "../../components/ImageUploader";
 import { EmojiPicker } from "../../components/EmojiPicker";
 
 export function CompanyInfoEditor() {
+  const [introText, setIntroText] = useState("");
   const [address, setAddress] = useState("");
   const [nearbyInfo, setNearbyInfo] = useState("");
   const [parkingInfo, setParkingInfo] = useState("");
@@ -51,6 +52,7 @@ export function CompanyInfoEditor() {
 
   useEffect(() => {
     getCompanyInfo().then((info: CompanyInfo) => {
+      setIntroText(info.introText);
       setAddress(info.address);
       setNearbyInfo(info.nearbyInfo ?? "");
       setParkingInfo(info.parkingInfo ?? "");
@@ -90,6 +92,7 @@ export function CompanyInfoEditor() {
     event.preventDefault();
     setSaved(false);
     await updateCompanyInfo({
+      introText,
       address,
       nearbyInfo: nearbyInfo || null,
       parkingInfo: parkingInfo || null,
@@ -227,6 +230,9 @@ export function CompanyInfoEditor() {
         <input value={popupBannerLinkUrl} onChange={(e) => setPopupBannerLinkUrl(e.target.value)} />
 
         <h2>청과 소개 페이지 문구</h2>
+        <label>한 줄 소개 문구</label>
+        <input value={introText} onChange={(e) => setIntroText(e.target.value)} />
+
         <label>소개 이미지 + 글</label>
         <textarea rows={4} value={aboutText} onChange={(e) => setAboutText(e.target.value)} />
         <ImageUploader

@@ -581,8 +581,14 @@ a {
 }
 
 .about-feature__text {
-  margin: 0;
-  color: var(--text);
+  margin: 0 auto;
+  max-width: 900px;
+  text-align: center;
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  color: var(--navy-900);
   line-height: 1.7;
   white-space: pre-line;
 }
