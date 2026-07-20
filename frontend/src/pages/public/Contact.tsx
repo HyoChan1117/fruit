@@ -51,7 +51,7 @@ export function Contact() {
 
   return (
     <>
-      <PageBanner title="문의하기" />
+      <PageBanner eyebrow="CONTACT" title="문의하기" />
       <div className="page-content">
         {submitted && <p>문의가 정상적으로 접수되었습니다.</p>}
         {error && <p className="error-text">{error}</p>}

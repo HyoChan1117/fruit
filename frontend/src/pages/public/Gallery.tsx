@@ -30,7 +30,7 @@ export function Gallery() {
 
   return (
     <>
-      <PageBanner title="갤러리" />
+      <PageBanner eyebrow="GALLERY" title="갤러리" />
       <div className="page-content">
         <div className="card-grid">
           {images.map((image, index) => (

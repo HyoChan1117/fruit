@@ -42,7 +42,7 @@ export function AuctionResults() {
 
   return (
     <>
-      <PageBanner title="경매 결과" />
+      <PageBanner eyebrow="AUCTION" title="경매 결과" />
       <div className="page-content">
         <div className="list-filters">
           <div className="list-filters__group">

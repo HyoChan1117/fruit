@@ -39,7 +39,6 @@ a {
   padding: 0.1rem 2rem 1rem;
   background: #fff;
   color: var(--navy-800);
-  border-bottom: 1px solid #e6e9ee;
 }
 
 .site-header--overlay {
@@ -48,7 +47,6 @@ a {
   left: 0;
   right: 0;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 100%);
-  border-bottom: none;
 }
 
 
@@ -58,7 +56,6 @@ a {
 
 .site-header--menu-open {
   background: transparent;
-  border-bottom-color: transparent;
 }
 
 .site-header--menu-open .site-header__brand {
@@ -73,7 +70,7 @@ a {
 }
 
 .site-header__logo {
-  height: 104px;
+  height: 120px;
   width: auto;
   display: block;
 }
@@ -220,9 +217,10 @@ a {
 }
 
 .page-banner {
-  padding: 3rem 2rem;
-  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%);
-  color: #fff;
+  padding: 2rem 2rem 2.5rem;
+  background: #fff;
+  color: var(--text);
+  border-bottom: 1px solid #eee;
 }
 
 .page-banner__inner {
@@ -230,15 +228,29 @@ a {
   margin: 0 auto;
 }
 
-.page-banner h1 {
-  font-size: 2rem;
-  font-weight: 800;
+.page-banner__eyebrow {
   margin: 0;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--blue-300) 0%, var(--blue-500) 55%, var(--navy-800) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
-.page-banner p {
-  margin: 0.5rem 0 0;
-  color: #f0ddd6;
+.page-banner h1 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0.6rem 0 0;
+  color: var(--text);
+}
+
+.page-banner__subtitle {
+  margin: 0.4rem 0 0;
+  color: #777;
 }
 
 .hero::after {
@@ -1167,7 +1179,7 @@ table td {
   }
 
   .site-header__logo {
-    height: 68px;
+    height: 92px;
   }
 
   .quick-nav {

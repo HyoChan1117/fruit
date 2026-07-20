@@ -17,7 +17,11 @@ export function NoticeDetail() {
 
   return (
     <>
-      <PageBanner title={notice.title} subtitle={new Date(notice.createdAt).toLocaleDateString()} />
+      <PageBanner
+        eyebrow="NOTICE"
+        title={notice.title}
+        subtitle={new Date(notice.createdAt).toLocaleDateString()}
+      />
       <div className="page-content">
         {notice.imageUrl && (
           <img src={resolveImageUrl(notice.imageUrl)} alt={notice.title} className="notice-detail__image" />

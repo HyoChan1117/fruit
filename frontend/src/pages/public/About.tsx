@@ -15,7 +15,7 @@ export function About() {
 
   return (
     <>
-      <PageBanner title="청과 소개" />
+      <PageBanner eyebrow="COMPANY" title="청과 소개" />
       <div className="page-content">
         {(companyInfo.aboutImageUrl || companyInfo.aboutText) && (
           <div className="about-feature">

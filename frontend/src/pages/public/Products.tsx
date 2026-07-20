@@ -20,7 +20,7 @@ export function Products() {
 
   return (
     <>
-      <PageBanner title="취급 품목" />
+      <PageBanner eyebrow="PRODUCTS" title="취급 품목" />
       <div className="page-content">
         <div className="list-filters">
           <div className="list-filters__group">

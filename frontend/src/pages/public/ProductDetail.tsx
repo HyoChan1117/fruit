@@ -17,7 +17,7 @@ export function ProductDetail() {
 
   return (
     <>
-      <PageBanner title={product.name} subtitle={`품종: ${product.variety}`} />
+      <PageBanner eyebrow="PRODUCTS" title={product.name} subtitle={`품종: ${product.variety}`} />
       <div className="page-content">
         <Link to="/products">← 목록으로</Link>
         {product.imageUrl && (
